@@ -23,6 +23,7 @@ open index.html        # macOS
 | `ecosystem.html` | Deep-dive on the six stakeholder pillars (players, clubs, academies, scouts, agents, fans) |
 | `talent.html` | The talent pathway — four stages, regional combines, development programs |
 | `insights.html` | Featured report + article grid + newsletter sign-up |
+| `passport.html` | Player passport demo — illustrative dashboard preview with demo data |
 | `contact.html` | Join-the-network form + regional hubs + safeguarding line |
 
 ## Brand
@@ -35,7 +36,8 @@ open index.html        # macOS
 
 ```
 global-football-ecosystem/
-├── index.html  ecosystem.html  talent.html  insights.html  contact.html
+├── index.html  ecosystem.html  talent.html  passport.html
+├── insights.html  contact.html
 └── assets/
     ├── css/styles.css   # full design system (tokens, components, responsive)
     └── js/main.js       # nav, scroll reveal, counters, parallax, forms

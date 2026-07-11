@@ -532,3 +532,68 @@ body.nav-open { overflow: hidden; }
   .scroll-cue .line { animation: none; }
   .btn, .card, .article-card .thumb img { transition: none; }
 }
+
+/* ---------- Passport dashboard ---------- */
+.dash {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--bg-alt);
+  padding: clamp(1.4rem, 3vw, 2.4rem);
+  display: grid; gap: 1.4rem;
+  box-shadow: var(--shadow);
+}
+.dash-grid { display: grid; gap: 1.4rem; }
+@media (min-width: 920px) { .dash-grid { grid-template-columns: 340px 1fr; } }
+.dash-cols { display: grid; gap: 1.4rem; }
+@media (min-width: 880px) { .dash-cols { grid-template-columns: 1fr 1fr; } }
+
+.id-card {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 1.6rem; background: rgba(242, 247, 240, 0.03);
+  text-align: center; align-self: start;
+}
+.avatar {
+  width: 84px; height: 84px; border-radius: 50%;
+  margin: 0 auto 1rem; display: grid; place-items: center;
+  font-family: var(--ff-head); font-weight: 700; font-size: 1.6rem;
+  color: var(--pitch-black);
+  background: linear-gradient(135deg, var(--volt), var(--volt-deep));
+}
+.verified {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  color: var(--volt); font-size: 0.8rem; font-weight: 600;
+  margin-top: 0.3rem;
+}
+.verified svg { width: 15px; height: 15px; }
+.id-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-top: 1.2rem; text-align: left; }
+.id-meta > div { border: 1px solid var(--line); border-radius: 10px; padding: 0.55rem 0.8rem; }
+.id-meta .k { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); }
+.id-meta .v { font-weight: 600; font-size: 0.92rem; }
+
+.tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.9rem; }
+@media (max-width: 720px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+.tile { border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1.1rem; background: rgba(242, 247, 240, 0.02); }
+.tile .v { font-family: var(--ff-head); font-weight: 700; font-size: 1.5rem; color: var(--volt); }
+.tile .k { font-size: 0.78rem; color: var(--text-muted); }
+
+.panel { border: 1px solid var(--line); border-radius: var(--radius); padding: 1.2rem 1.4rem; background: rgba(242, 247, 240, 0.02); }
+.panel h4 { font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.9rem; }
+
+.timeline li { position: relative; padding: 0 0 1.1rem 1.6rem; border-left: 1px solid var(--line); margin-left: 0.4rem; }
+.timeline li:last-child { padding-bottom: 0; border-left-color: transparent; }
+.timeline li::before {
+  content: ""; position: absolute; left: -5px; top: 0.45em;
+  width: 9px; height: 9px; border-radius: 50%; background: var(--volt);
+}
+.timeline .when { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); }
+.timeline .what { font-size: 0.95rem; color: var(--chalk-dim); }
+
+.rows { display: grid; gap: 0.6rem; }
+.rows li {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+  border: 1px solid var(--line); border-radius: 10px;
+  padding: 0.6rem 0.9rem; font-size: 0.9rem; color: var(--chalk-dim);
+}
+.rows .ok { color: var(--volt); font-weight: 600; white-space: nowrap; font-size: 0.82rem; }
+
+.dash-note { font-size: 0.8rem; color: var(--text-faint); text-align: center; }
