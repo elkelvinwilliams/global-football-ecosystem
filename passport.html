@@ -63,24 +63,44 @@
       <div class="container">
         <span class="eyebrow reveal">The player passport</span>
         <h1 class="reveal reveal-d1">One profile. Every match. <span class="volt">For life.</span></h1>
-        <p class="lead reveal reveal-d2">Everything a player is — verified footage, stats, development record and every approach ever made — in one tamper-proof passport the player owns. Below is an illustrative preview with demo data.</p>
+        <p class="lead reveal reveal-d2">Everything a player is — verified footage, stats, development record and every approach ever made — in one tamper-proof passport the player owns. Switch between four illustrative passports below, all demo data.</p>
       </div>
     </section>
 
     <!-- ============ DASHBOARD DEMO ============ -->
     <section class="bg-alt">
       <div class="container">
-        <div class="dash reveal" role="img" aria-label="Illustrative preview of a GFE player passport dashboard with demo data">
+        <!-- Player switcher -->
+        <div class="passport-switch reveal" role="tablist" aria-label="Choose a demo player passport">
+          <button class="pswitch" role="tab" id="tab-amara" data-player="amara" aria-selected="true">
+            <span class="chip-avatar" aria-hidden="true">AD</span>
+            <span class="chip-text">Amara Diallo<small>Forward · Senegal</small></span>
+          </button>
+          <button class="pswitch" role="tab" id="tab-mateus" data-player="mateus" aria-selected="false" tabindex="-1">
+            <span class="chip-avatar" aria-hidden="true">MR</span>
+            <span class="chip-text">Mateus Rocha<small>Midfielder · Brazil</small></span>
+          </button>
+          <button class="pswitch" role="tab" id="tab-yuki" data-player="yuki" aria-selected="false" tabindex="-1">
+            <span class="chip-avatar" aria-hidden="true">YT</span>
+            <span class="chip-text">Yuki Tanaka<small>Goalkeeper · Japan</small></span>
+          </button>
+          <button class="pswitch" role="tab" id="tab-lena" data-player="lena" aria-selected="false" tabindex="-1">
+            <span class="chip-avatar" aria-hidden="true">LK</span>
+            <span class="chip-text">Lena Kovačić<small>Centre-back · Croatia</small></span>
+          </button>
+        </div>
+
+        <div class="dash reveal" id="passportDash" role="tabpanel" tabindex="0" aria-labelledby="tab-amara">
           <div class="dash-grid">
             <!-- Identity card -->
             <div class="id-card">
-              <div class="avatar" aria-hidden="true">AD</div>
-              <h3>Amara Diallo</h3>
+              <div class="avatar" id="ppAvatar" aria-hidden="true">AD</div>
+              <h3 id="ppName">Amara Diallo</h3>
               <span class="verified">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 GFE-verified · age &amp; identity confirmed
               </span>
-              <div class="id-meta">
+              <div class="id-meta" id="ppMeta">
                 <div><div class="k">Age</div><div class="v">16</div></div>
                 <div><div class="k">Position</div><div class="v">Forward</div></div>
                 <div><div class="k">Foot</div><div class="v">Right</div></div>
@@ -92,7 +112,7 @@
 
             <!-- Right column -->
             <div style="display:grid; gap:1.4rem; align-content:start;">
-              <div class="tiles">
+              <div class="tiles" id="ppTiles">
                 <div class="tile"><div class="v">31</div><div class="k">Verified matches this season</div></div>
                 <div class="tile"><div class="v">19</div><div class="k">Goals</div></div>
                 <div class="tile"><div class="v">8</div><div class="k">Assists</div></div>
@@ -100,20 +120,32 @@
               </div>
 
               <div class="dash-cols">
-                <div class="panel">
-                  <h4>Development timeline</h4>
-                  <ul class="timeline">
-                    <li><div class="when">May 2026</div><div class="what">Selected — West Africa U-17 regional combine, Accra</div></li>
-                    <li><div class="when">Feb 2026</div><div class="what">Term benchmark: top decile for pace &amp; pressing (global U-17 peers)</div></li>
-                    <li><div class="when">Sep 2025</div><div class="what">Joined Étoile de Dakar academy · education plan registered</div></li>
-                    <li><div class="when">Mar 2025</div><div class="what">Passport created by registered grassroots coach, Thiès</div></li>
-                  </ul>
+                <div style="display:grid; gap:1.4rem; align-content:start;">
+                  <div class="panel">
+                    <h4>Development timeline</h4>
+                    <ul class="timeline" id="ppTimeline">
+                      <li><div class="when">May 2026</div><div class="what">Selected — West Africa U-17 regional combine, Accra</div></li>
+                      <li><div class="when">Feb 2026</div><div class="what">Term benchmark: top decile for pace &amp; pressing (global U-17 peers)</div></li>
+                      <li><div class="when">Sep 2025</div><div class="what">Joined Étoile de Dakar academy · education plan registered</div></li>
+                      <li><div class="when">Mar 2025</div><div class="what">Passport created by registered grassroots coach, Thiès</div></li>
+                    </ul>
+                  </div>
+                  <div class="panel">
+                    <h4 id="ppBarsTitle">Combine benchmarks · global U-17 forwards</h4>
+                    <div class="bars" id="ppBars">
+                      <div class="bar-row"><div class="top"><span>Pace</span><span class="volt">96th</span></div><div class="bar-track"><div class="bar-fill" style="width:96%"></div></div></div>
+                      <div class="bar-row"><div class="top"><span>Pressing</span><span class="volt">91st</span></div><div class="bar-track"><div class="bar-fill" style="width:91%"></div></div></div>
+                      <div class="bar-row"><div class="top"><span>Dribbling</span><span class="volt">88th</span></div><div class="bar-track"><div class="bar-fill" style="width:88%"></div></div></div>
+                      <div class="bar-row"><div class="top"><span>Finishing</span><span class="volt">84th</span></div><div class="bar-track"><div class="bar-fill" style="width:84%"></div></div></div>
+                      <div class="bar-row"><div class="top"><span>Aerial duels</span><span class="volt">62nd</span></div><div class="bar-track"><div class="bar-fill" style="width:62%"></div></div></div>
+                    </div>
+                  </div>
                 </div>
 
                 <div style="display:grid; gap:1.4rem; align-content:start;">
                   <div class="panel">
                     <h4>Certified footage</h4>
-                    <ul class="rows">
+                    <ul class="rows" id="ppFootage">
                       <li><span>Combine full match · Accra</span><span class="ok">Certified</span></li>
                       <li><span>League semi-final · 90 min</span><span class="ok">Certified</span></li>
                       <li><span>Technical assessment reel</span><span class="ok">Certified</span></li>
@@ -121,7 +153,7 @@
                   </div>
                   <div class="panel">
                     <h4>Safeguarding log</h4>
-                    <ul class="rows">
+                    <ul class="rows" id="ppSafe">
                       <li><span>Guardian access</span><span class="ok">Active · 2 guardians</span></li>
                       <li><span>Club approaches (logged)</span><span class="ok">3 · all visible</span></li>
                       <li><span>Agent mandates</span><span class="ok">None on record</span></li>
@@ -130,7 +162,7 @@
                 </div>
               </div>
 
-              <p class="dash-note">Illustrative preview — demo data only, not a real player.</p>
+              <p class="dash-note">Illustrative preview — demo data only; every player, club and academy shown is fictional.</p>
             </div>
           </div>
         </div>
@@ -241,5 +273,6 @@
   </footer>
 
   <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/passport.js" defer></script>
 </body>
 </html>

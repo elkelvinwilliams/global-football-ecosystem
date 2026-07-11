@@ -23,7 +23,7 @@ open index.html        # macOS
 | `ecosystem.html` | Deep-dive on the six stakeholder pillars (players, clubs, academies, scouts, agents, fans) |
 | `talent.html` | The talent pathway — four stages, regional combines, development programs |
 | `insights.html` | Featured report + article grid + newsletter sign-up |
-| `passport.html` | Player passport demo — illustrative dashboard preview with demo data |
+| `passport.html` | Player passports demo — four switchable demo passports (identity, stats, combine benchmarks, timeline, footage, safeguarding), rendered from data |
 | `contact.html` | Join-the-network form + regional hubs + safeguarding line |
 
 ## Brand
@@ -40,7 +40,9 @@ global-football-ecosystem/
 ├── insights.html  contact.html
 └── assets/
     ├── css/styles.css   # full design system (tokens, components, responsive)
-    └── js/main.js       # nav, scroll reveal, counters, parallax, forms
+    └── js/
+        ├── main.js      # nav, scroll reveal, counters, parallax, forms
+        └── passport.js  # passport demo data + switchable dashboard rendering
 ```
 
 ## Design system
@@ -54,6 +56,7 @@ global-football-ecosystem/
 - Animated stat counters
 - Pointer parallax on hero orbs (fine-pointer devices only)
 - Sticky header transition + scroll progress bar
+- Passport switcher (accessible tabs, arrow-key support, `#player` deep links) with cross-fade + growing benchmark bars
 - **Respects `prefers-reduced-motion`** — all motion disables for users who opt out
 
 ## Notes for going live

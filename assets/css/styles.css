@@ -597,3 +597,61 @@ body.nav-open { overflow: hidden; }
 .rows .ok { color: var(--volt); font-weight: 600; white-space: nowrap; font-size: 0.82rem; }
 
 .dash-note { font-size: 0.8rem; color: var(--text-faint); text-align: center; }
+
+/* ---------- Passport switcher ---------- */
+.passport-switch {
+  display: flex; flex-wrap: wrap; gap: 0.7rem;
+  margin-bottom: 1.6rem;
+}
+.pswitch {
+  display: inline-flex; align-items: center; gap: 0.65rem;
+  padding: 0.45rem 1.15rem 0.45rem 0.55rem;
+  border: 1px solid var(--line); border-radius: 999px;
+  color: var(--text-muted); text-align: left;
+  font-family: var(--ff-head); font-weight: 600; font-size: 0.9rem; line-height: 1.15;
+  transition: border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease),
+              background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+}
+.pswitch:hover { border-color: var(--line-strong); color: var(--chalk); transform: translateY(-2px); }
+.pswitch .chip-avatar {
+  width: 32px; height: 32px; border-radius: 50%; flex: none;
+  display: grid; place-items: center;
+  font-size: 0.72rem; font-weight: 700;
+  background: rgba(242, 247, 240, 0.07); color: var(--chalk);
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+.pswitch .chip-text small {
+  display: block;
+  font-size: 0.62rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+  opacity: 0.7;
+}
+.pswitch[aria-selected="true"] {
+  background: var(--volt); border-color: var(--volt);
+  color: var(--pitch-black); box-shadow: var(--shadow-volt);
+}
+.pswitch[aria-selected="true"] .chip-avatar { background: var(--pitch-black); color: var(--volt); }
+
+/* ---------- Benchmark bars ---------- */
+.bars { display: grid; gap: 0.85rem; }
+.bar-row .top {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+  font-size: 0.85rem; color: var(--chalk-dim); margin-bottom: 0.35rem;
+}
+.bar-row .top .volt { font-family: var(--ff-head); font-weight: 700; font-size: 0.8rem; }
+.bar-track {
+  height: 6px; border-radius: 999px; overflow: hidden;
+  background: rgba(242, 247, 240, 0.08);
+}
+.bar-fill {
+  height: 100%; border-radius: inherit;
+  background: linear-gradient(90deg, var(--volt-deep), var(--volt));
+  transition: width 900ms var(--ease);
+}
+
+/* ---------- Passport swap transition ---------- */
+.dash .dash-grid { transition: opacity 200ms var(--ease), transform 200ms var(--ease); }
+.dash.is-swapping .dash-grid { opacity: 0; transform: translateY(10px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .pswitch, .bar-fill, .dash .dash-grid { transition: none; }
+}
