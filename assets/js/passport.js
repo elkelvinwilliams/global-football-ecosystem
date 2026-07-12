@@ -41,6 +41,18 @@
         ['Guardian access', 'Active · 2 guardians'],
         ['Club approaches (logged)', '3 · all visible'],
         ['Agent mandates', 'None on record']
+      ],
+      worth: { amount: '€850K', trend: '+38% this term', note: 'Top 2% of global U-17 forwards' },
+      ai: [
+        ['Top speed (tracked)', '34.6 km/h'],
+        ['Sprints per 90', '27'],
+        ['xG per 90', '0.68'],
+        ['Preferred attacking zone', 'Left half-space']
+      ],
+      reps: [
+        ['Agent', 'None — guardian-managed'],
+        ['Social media', 'NorthBank Social · 214K followers'],
+        ['Commercial deals', 'None on record']
       ]
     },
 
@@ -72,6 +84,18 @@
         ['Guardian access', 'Active · 1 guardian'],
         ['Club approaches (logged)', '5 · all visible'],
         ['Agent mandates', '1 · registered & visible']
+      ],
+      worth: { amount: '€1.4M', trend: '+52% this term', note: 'Top 1% of global U-18 midfielders' },
+      ai: [
+        ['Passes per 90', '91 · 89% completed'],
+        ['Progressive passes per 90', '12.3'],
+        ['Ball recoveries per 90', '8.1'],
+        ['Preferred build-up zone', 'Left half, deep pivot']
+      ],
+      reps: [
+        ['Agent', 'Horizonte Sports Group · registered mandate'],
+        ['Social media', 'Bola Criativa Mídia · 480K followers'],
+        ['Commercial deals', '1 · boot partner, logged & visible']
       ]
     },
 
@@ -103,6 +127,18 @@
         ['Guardian access', 'Active · 2 guardians'],
         ['Club approaches (logged)', '2 · all visible'],
         ['Agent mandates', 'None on record']
+      ],
+      worth: { amount: '€320K', trend: '+25% this term', note: 'Top 5% of global U-16 goalkeepers' },
+      ai: [
+        ['Save rate, shots inside box', '74%'],
+        ['Distribution accuracy', '88%'],
+        ['Average sweeping distance', '18.4 m off line'],
+        ['Reaction time (shot-stopping)', '0.19 s']
+      ],
+      reps: [
+        ['Agent', 'None — guardian-managed'],
+        ['Social media', 'Family-run · Tokyo Pitch Media advising'],
+        ['Commercial deals', 'None on record']
       ]
     },
 
@@ -134,6 +170,18 @@
         ['Guardian access', 'Active · 2 guardians'],
         ['Club approaches (logged)', '4 · all visible'],
         ['Agent mandates', 'None on record']
+      ],
+      worth: { amount: '€520K', trend: '+44% this term', note: 'Top 3% of global U-17 defenders' },
+      ai: [
+        ['Aerial duels won', '78%'],
+        ['Line-breaking passes per 90', '6.8'],
+        ['Progressive carries per 90', '4.2'],
+        ['Defensive-line height (avg)', '42 m · high line']
+      ],
+      reps: [
+        ['Agent', 'None — guardian-managed'],
+        ['Social media', 'Adria Athlete Studio · 96K followers'],
+        ['Commercial deals', 'None on record']
       ]
     }
   };
@@ -147,7 +195,10 @@
     barsTitle: document.getElementById('ppBarsTitle'),
     bars: document.getElementById('ppBars'),
     footage: document.getElementById('ppFootage'),
-    safeguarding: document.getElementById('ppSafe')
+    safeguarding: document.getElementById('ppSafe'),
+    worth: document.getElementById('ppWorth'),
+    ai: document.getElementById('ppAi'),
+    reps: document.getElementById('ppReps')
   };
 
   function el(tag, className, text) {
@@ -217,6 +268,14 @@
 
     renderRows(els.footage, player.footage);
     renderRows(els.safeguarding, player.safeguarding);
+    renderRows(els.ai, player.ai);
+    renderRows(els.reps, player.reps);
+
+    els.worth.textContent = '';
+    els.worth.appendChild(el('div', 'k', 'Estimated market value'));
+    els.worth.appendChild(el('div', 'v', player.worth.amount));
+    els.worth.appendChild(el('div', 'trend', '▲ ' + player.worth.trend));
+    els.worth.appendChild(el('div', 'note', player.worth.note));
   }
 
   function renderRows(list, rows) {

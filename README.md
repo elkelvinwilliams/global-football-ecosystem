@@ -23,7 +23,7 @@ open index.html        # macOS
 | `ecosystem.html` | Deep-dive on the six stakeholder pillars (players, clubs, academies, scouts, agents, fans) |
 | `talent.html` | The talent pathway — four stages, regional combines, development programs |
 | `insights.html` | Featured report + article grid + newsletter sign-up |
-| `passport.html` | Player passports demo — four switchable demo passports (identity, stats, combine benchmarks, timeline, footage, safeguarding), rendered from data |
+| `passport.html` | Player passports demo — four switchable demo passports (identity, market value, stats, combine benchmarks, AI match analysis, timeline, footage, representation/off-pitch team, safeguarding), rendered from data |
 | `contact.html` | Join-the-network form + regional hubs + safeguarding line |
 
 ## Brand

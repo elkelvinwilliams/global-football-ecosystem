@@ -598,6 +598,20 @@ body.nav-open { overflow: hidden; }
 
 .dash-note { font-size: 0.8rem; color: var(--text-faint); text-align: center; }
 
+/* ---------- Market value card ---------- */
+.worth {
+  margin-top: 1.2rem; padding: 1rem 1.1rem;
+  border: 1px solid var(--line-strong); border-radius: var(--radius);
+  background: rgba(198, 249, 78, 0.06);
+  text-align: center;
+}
+.worth .k { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); }
+.worth .v { font-family: var(--ff-head); font-weight: 700; font-size: 1.9rem; color: var(--volt); line-height: 1.15; }
+.worth .trend { font-family: var(--ff-head); font-weight: 600; font-size: 0.8rem; color: var(--volt); }
+.worth .note { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.3rem; }
+
+.panel-note { font-size: 0.75rem; color: var(--text-faint); margin-top: 0.8rem; }
+
 /* ---------- Passport switcher ---------- */
 .passport-switch {
   display: flex; flex-wrap: wrap; gap: 0.7rem;
