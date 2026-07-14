@@ -365,7 +365,7 @@ body.nav-open { overflow: hidden; }
 }
 .card-link svg { width: 16px; height: 16px; transition: transform var(--t-fast) var(--ease); }
 .card-link:hover svg { transform: translateX(4px); }
-.card .tag {
+.card .tag, .video-tags .tag {
   align-self: flex-start;
   font-size: 0.7rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--volt); background: rgba(198, 249, 78, 0.1);
@@ -532,6 +532,14 @@ body.nav-open { overflow: hidden; }
   .scroll-cue .line { animation: none; }
   .btn, .card, .article-card .thumb img { transition: none; }
 }
+
+/* ---------- Club style film ---------- */
+.style-video video {
+  width: 100%; display: block;
+  border: 1px solid var(--line); border-radius: 10px;
+  background: var(--pitch-900);
+}
+.video-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.9rem; }
 
 /* ---------- GFE Vision clip mock ---------- */
 .clip-mock {

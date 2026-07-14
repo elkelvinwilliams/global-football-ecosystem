@@ -24,6 +24,7 @@ open index.html        # macOS
 | `talent.html` | The talent pathway — four stages, regional combines, development programs |
 | `insights.html` | Featured report + article grid + newsletter sign-up |
 | `passport.html` | Player passports demo — four switchable demo passports rendered from data, each with four sub-views: Overview (identity, market value, benchmarks, AI analysis, representation, safeguarding), Match log, Growth charts, Education & availability |
+| `clubs.html` | Clubs & academies — playing-style films (each club completes a guided video) + switchable club passport: identity, licence, style DNA, development record, facilities, compliance, alumni |
 | `vision.html` | GFE Vision — the AI video-analysis product: annotated-clip mock, certification pipeline, position-aware metrics, integrity story |
 | `scouts.html` | Scout/club console demo — filterable player pool (position/region), shortlisting, links into demo passports, safeguarded-contact flow |
 | `fans.html` | Fans & partners — verified highlights, academy-funding memberships, transparent brand-deal marketplace with revenue split |
@@ -39,16 +40,23 @@ open index.html        # macOS
 
 ```
 global-football-ecosystem/
-├── index.html  ecosystem.html  talent.html  passport.html
+├── index.html  ecosystem.html  clubs.html  talent.html  passport.html
 ├── vision.html  scouts.html  fans.html
 ├── insights.html  contact.html
 └── assets/
     ├── css/styles.css   # full design system (tokens, components, responsive)
-    └── js/
-        ├── main.js      # nav, scroll reveal, counters, parallax, forms
-        ├── passport.js  # passport demo data, sub-views, SVG growth charts
-        └── scouts.js    # scout console demo data, filters, shortlisting
+    ├── js/
+    │   ├── main.js      # nav, scroll reveal, counters, parallax, forms
+    │   ├── passport.js  # passport demo data, sub-views, SVG growth charts
+    │   ├── clubs.js     # club passport demo data + style-film switching
+    │   └── scouts.js    # scout console demo data, filters, shortlisting
+    └── video/           # generated demo style films (mp4 + webm + poster)
 ```
+
+The four club style films are original, programmatically generated tactical
+animations (fictional clubs) — replace them with licensed club footage for
+production; each club's `video`/`poster` path in `assets/js/clubs.js` is the
+drop-in point.
 
 ## Design system
 
