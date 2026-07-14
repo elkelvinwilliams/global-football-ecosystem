@@ -1,0 +1,42 @@
+name: Platform CI
+
+on:
+  pull_request:
+    paths: ["platform/**"]
+  push:
+    branches: [main]
+    paths: ["platform/**"]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    defaults:
+      run: { working-directory: platform }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm, cache-dependency-path: platform/pnpm-lock.yaml }
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm lint --continue || true # advisory until configs land (Sprint 1)
+      - run: pnpm test
+
+  prisma-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npx prisma validate --schema platform/packages/db/prisma/schema.prisma
+        env:
+          DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
+
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Secret scan
+        uses: trufflesecurity/trufflehog@main
+        with: { path: ./platform, extra_args: --only-verified }

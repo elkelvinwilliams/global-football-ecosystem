@@ -1,4 +1,16 @@
-# Global Football Ecosystem (GFE) — Website
+# Global Football Ecosystem (GFE)
+
+**This repository now holds three things:**
+
+| Tree | What it is |
+|------|-----------|
+| `/` (this site) | The marketing/demo site — live on GitHub Pages |
+| [`/docs`](docs/README.md) | Investor-grade platform documentation: PRD, SRS, architecture, database, API, blockchain, security, AI, infrastructure, roadmaps, GTM |
+| [`/platform`](platform/README.md) | The platform codebase scaffold: TypeScript monorepo (Next.js + NestJS + Prisma), smart contracts, Docker, CI, Terraform |
+
+---
+
+## The marketing site
 
 A multi-page marketing site for the Global Football Ecosystem: a (fictional)
 network connecting players, clubs, academies, scouts, agents and fans into one

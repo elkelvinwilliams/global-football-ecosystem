@@ -1,0 +1,951 @@
+// =====================================================================
+// GFE — Complete Database Schema (system of record)
+// Authoritative schema-as-code. See docs/02-architecture/database.md for
+// modelling rationale. RLS policies live in ./sql/rls/*.sql migrations.
+// =====================================================================
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [pgcrypto, vector]
+}
+
+// ------------------------------------------------------------------ enums
+
+enum UserRole {
+  PLAYER
+  GUARDIAN
+  ACADEMY_STAFF
+  CLUB_STAFF
+  SCOUT
+  AGENT
+  SPONSOR
+  INVESTOR
+  MEDIA
+  FAN
+  ADMIN
+}
+
+enum AccountStatus {
+  PENDING
+  ACTIVE
+  RESTRICTED
+  SUSPENDED
+  DELETED
+}
+
+enum OrgType {
+  ACADEMY
+  CLUB
+  AGENCY
+  SPONSOR
+  INVESTOR
+  MEDIA
+  TOURNAMENT
+  SCHOOL
+  FEDERATION
+}
+
+enum OrgRole {
+  OWNER
+  ADMIN
+  STAFF
+}
+
+enum KycStatus {
+  NOT_STARTED
+  PENDING
+  VERIFIED
+  FAILED
+  EXPIRED
+}
+
+enum GuardianshipStatus {
+  INVITED
+  ACTIVE
+  REVOKED
+}
+
+enum Provenance {
+  SELF
+  ACADEMY
+  CLUB
+  VERIFIED_PARTNER
+}
+
+enum Foot {
+  LEFT
+  RIGHT
+  BOTH
+}
+
+enum Availability {
+  NOT_AVAILABLE
+  OPEN_TO_TRIALS
+  OPEN_TO_TRANSFER
+  ON_LOAN_LISTING
+}
+
+enum MediaState {
+  UPLOADING
+  PROCESSING
+  READY
+  FAILED
+  REMOVED
+}
+
+enum MediaVerification {
+  UNVERIFIED
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum ActionType {
+  GOAL
+  ASSIST
+  SAVE
+  DEFENSIVE_DUEL
+  PASS
+  SKILL
+  PRESSING_ACTION
+  SET_PIECE
+  OTHER
+}
+
+enum OpportunityKind {
+  CLUB_REQUEST
+  TRIAL
+  SPONSORSHIP
+  INVESTMENT
+  MEDIA_REQUEST
+  ACADEMY_PARTNERSHIP
+}
+
+enum OpportunityStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+  EXPIRED
+}
+
+enum ApplicationStatus {
+  AWAITING_CONSENT
+  SUBMITTED
+  SHORTLISTED
+  INVITED
+  COMPLETED
+  REJECTED
+  WITHDRAWN
+}
+
+enum MandateStatus {
+  DRAFT
+  AWAITING_CONSENT
+  ACTIVE
+  EXPIRED
+  TERMINATED
+  DISPUTED
+}
+
+enum ConsentPurpose {
+  PROFILE_PUBLISH
+  MEDIA_PUBLISH
+  TRIAL_APPLICATION
+  MANDATE_SIGNATURE
+  DATA_PROCESSING
+  MEDICAL_SHARE
+  MARKETING
+}
+
+enum ConsentState {
+  PENDING
+  GRANTED
+  WITHDRAWN
+  EXPIRED
+}
+
+enum VerificationSubjectType {
+  USER
+  ORGANISATION
+  DOCUMENT
+  MANDATE
+  MEDIA
+}
+
+enum VerificationDecision {
+  PENDING
+  APPROVED
+  REJECTED
+  REVOKED
+}
+
+enum BadgeType {
+  VERIFIED_PLAYER
+  VERIFIED_ACADEMY
+  VERIFIED_AGENT
+  VERIFIED_CLUB
+  VERIFIED_SPONSOR
+  VERIFIED_INVESTOR
+  VERIFIED_SCOUT
+  VERIFIED_DOCUMENT
+  VERIFIED_MANDATE
+}
+
+enum ThreadKind {
+  DIRECT
+  ORG
+  GUARDIAN_APPROACH
+  DEAL_ROOM
+}
+
+enum PiiClass {
+  PUBLIC
+  INTERNAL
+  SENSITIVE
+  SEALED_MEDICAL
+}
+
+enum AnchorRecordType {
+  MANDATE
+  CONSENT
+  SCOUTING_REPORT
+  CV_SNAPSHOT
+  DEAL_MILESTONE
+  AUDIT_HEAD
+  VERIFICATION_DECISION
+}
+
+enum FraudSignalState {
+  OPEN
+  REVIEWING
+  CONFIRMED
+  DISMISSED
+}
+
+// ------------------------------------------------- identity & access
+
+model User {
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  role           UserRole
+  status         AccountStatus @default(PENDING)
+  email          String?       @unique
+  phone          String?       @unique
+  displayName    String
+  country        String? // ISO 3166-1 alpha-2
+  // DOB is envelope-encrypted at application layer; only ciphertext here.
+  dobEncrypted   Bytes?
+  isMinor        Boolean       @default(false)
+  kycStatus      KycStatus     @default(NOT_STARTED)
+  kycProviderRef String?
+  locale         String        @default("en")
+  tokenVersion   Int           @default(1) // bump to revoke all JWTs
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  deletedAt      DateTime?
+
+  memberships        OrgMembership[]
+  playerProfile      PlayerProfile?
+  guardianLinks      Guardianship[]     @relation("guardian")
+  credentials        AuthCredential[]
+  sessions           Session[]
+  mandatesAsAgent    Mandate[]          @relation("agent")
+  consents           ConsentRecord[]    @relation("subject")
+  guardianConsents   ConsentRecord[]    @relation("guardianSigner")
+  scoutingReports    ScoutingReport[]   @relation("author")
+  threads            ThreadMember[]
+  messages           Message[]
+  notifications      Notification[]
+  auditEvents        AuditEvent[]       @relation("actor")
+  verificationCases  VerificationCase[] @relation("subjectUser")
+  reviewedCases      VerificationCase[] @relation("reviewer")
+  dealMemberships    DealMember[]
+  fraudSignals       FraudSignal[]      @relation("subjectUser")
+  apiKeys            ApiKey[]
+
+  @@index([role, status])
+  @@index([country])
+}
+
+model AuthCredential {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id])
+  kind      String // "otp", "webauthn", "password"
+  publicKey Bytes? // webauthn
+  secret    Bytes? // hashed
+  createdAt DateTime @default(now())
+  lastUsed  DateTime?
+
+  @@index([userId, kind])
+}
+
+model Session {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String    @db.Uuid
+  user             User      @relation(fields: [userId], references: [id])
+  refreshTokenHash String    @unique
+  familyId         String    @db.Uuid // rotation family; reuse => revoke family
+  deviceInfo       Json?
+  ip               String?
+  expiresAt        DateTime
+  revokedAt        DateTime?
+  createdAt        DateTime  @default(now())
+
+  @@index([userId, familyId])
+}
+
+model Organisation {
+  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  type          OrgType
+  name          String
+  slug          String        @unique
+  country       String
+  city          String?
+  founded       Int?
+  website       String?
+  bio           String?
+  kybStatus     KycStatus     @default(NOT_STARTED)
+  kybProviderRef String?
+  status        AccountStatus @default(PENDING)
+  // Academy/club extras
+  facilities    Json?
+  ageGroups     String?
+  safeguarding  Json? // policy refs, officer info
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  deletedAt     DateTime?
+
+  members           OrgMembership[]
+  careerEntries     CareerEntry[]
+  opportunities     Opportunity[]
+  scoutingReports   ScoutingReport[]  @relation("authorOrg")
+  verificationCases VerificationCase[] @relation("subjectOrg")
+  badges            Badge[]           @relation("orgBadges")
+  documents         Document[]        @relation("orgDocuments")
+  fraudSignals      FraudSignal[]     @relation("subjectOrg")
+  statEntries       StatEntry[]       @relation("statSourceOrg")
+  mediaVerified     MediaAsset[]      @relation("mediaVerifierOrg")
+
+  @@index([type, country, status])
+}
+
+model OrgMembership {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @db.Uuid
+  orgId     String   @db.Uuid
+  role      OrgRole  @default(STAFF)
+  title     String?
+  user      User         @relation(fields: [userId], references: [id])
+  org       Organisation @relation(fields: [orgId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, orgId])
+  @@index([orgId, role])
+}
+
+model Guardianship {
+  id         String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  guardianId String             @db.Uuid
+  playerId   String             @db.Uuid
+  status     GuardianshipStatus @default(INVITED)
+  relation   String? // parent, legal guardian…
+  guardian   User          @relation("guardian", fields: [guardianId], references: [id])
+  player     PlayerProfile @relation(fields: [playerId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([guardianId, playerId])
+  @@index([playerId, status])
+}
+
+model ApiKey {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ownerId    String    @db.Uuid
+  owner      User      @relation(fields: [ownerId], references: [id])
+  name       String
+  keyHash    String    @unique
+  scopes     String[]
+  rateClass  String    @default("partner-read")
+  expiresAt  DateTime?
+  revokedAt  DateTime?
+  createdAt  DateTime  @default(now())
+}
+
+// ------------------------------------------------------------- talent
+
+model PlayerProfile {
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String       @unique @db.Uuid
+  user           User         @relation(fields: [userId], references: [id])
+  positions      String[] // e.g. ["ST","LW"]
+  dominantFoot   Foot?
+  heightCm       Int?
+  weightKg       Int?
+  nationality    String?
+  currentOrgId   String?      @db.Uuid
+  availability   Availability @default(NOT_AVAILABLE)
+  bio            String?
+  // per-field visibility: { "heightCm": "PUBLIC", "stats": "VERIFIED_ORGS", ... }
+  visibility     Json         @default("{}")
+  completeness   Int          @default(0)
+  embedding      Unsupported("vector(768)")?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  guardianships   Guardianship[]
+  careerEntries   CareerEntry[]
+  statEntries     StatEntry[]
+  mediaAssets     MediaAsset[]
+  scoutingReports ScoutingReport[]
+  applications    Application[]
+  mandates        Mandate[]
+  cvShareLinks    CvShareLink[]
+  badges          Badge[]          @relation("playerBadges")
+
+  @@index([nationality, availability])
+  @@index([currentOrgId])
+}
+
+model CareerEntry {
+  id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  playerId   String     @db.Uuid
+  player     PlayerProfile @relation(fields: [playerId], references: [id])
+  orgId      String?    @db.Uuid
+  org        Organisation? @relation(fields: [orgId], references: [id])
+  clubName   String // freetext fallback for unverified history
+  role       String?
+  startDate  DateTime
+  endDate    DateTime?
+  provenance Provenance @default(SELF)
+  createdAt  DateTime   @default(now())
+
+  @@index([playerId, startDate])
+}
+
+model Competition {
+  id      String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name    String
+  country String?
+  level   String?
+  matches Match[]
+
+  @@unique([name, country])
+}
+
+model Match {
+  id            String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  competitionId String?     @db.Uuid
+  competition   Competition? @relation(fields: [competitionId], references: [id])
+  homeTeam      String
+  awayTeam      String
+  playedAt      DateTime
+  confirmedBy   String?     @db.Uuid // org confirmation
+  statEntries   StatEntry[]
+  mediaAssets   MediaAsset[]
+
+  @@index([playedAt])
+}
+
+model StatEntry {
+  id             String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  playerId       String     @db.Uuid
+  player         PlayerProfile @relation(fields: [playerId], references: [id])
+  matchId        String?    @db.Uuid
+  match          Match?     @relation(fields: [matchId], references: [id])
+  period         String? // season/term label when not match-scoped
+  metrics        Json // { minutes, goals, assists, cleanSheet, cards… }
+  provenance     Provenance @default(SELF)
+  sourceOrgId    String?    @db.Uuid
+  sourceOrg      Organisation? @relation("statSourceOrg", fields: [sourceOrgId], references: [id])
+  supersededById String?    @db.Uuid
+  supersededBy   StatEntry? @relation("supersede", fields: [supersededById], references: [id])
+  supersedes     StatEntry[] @relation("supersede")
+  createdAt      DateTime   @default(now())
+
+  @@index([playerId, matchId])
+  @@index([playerId, provenance])
+}
+
+model MediaAsset {
+  id                 String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  playerId           String?           @db.Uuid
+  player             PlayerProfile?    @relation(fields: [playerId], references: [id])
+  uploaderId         String            @db.Uuid
+  kind               String // "video" | "image"
+  state              MediaState        @default(UPLOADING)
+  verificationStatus MediaVerification @default(UNVERIFIED)
+  verifierOrgId      String?           @db.Uuid
+  verifierOrg        Organisation?     @relation("mediaVerifierOrg", fields: [verifierOrgId], references: [id])
+  matchId            String?           @db.Uuid
+  match              Match?            @relation(fields: [matchId], references: [id])
+  storageKey         String
+  hlsManifestKey     String?
+  thumbnailKey       String?
+  durationSec        Int?
+  actionTags         ActionType[]
+  positionTag        String?
+  recordedOn         DateTime?
+  sha256             String?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  deletedAt          DateTime?
+
+  @@index([playerId, verificationStatus])
+  @@index([state])
+}
+
+model CvShareLink {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  playerId  String    @db.Uuid
+  player    PlayerProfile @relation(fields: [playerId], references: [id])
+  token     String    @unique
+  label     String?
+  views     Int       @default(0)
+  expiresAt DateTime?
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+}
+
+model ScoutingReport {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  playerId    String   @db.Uuid
+  player      PlayerProfile @relation(fields: [playerId], references: [id])
+  authorId    String   @db.Uuid
+  author      User     @relation("author", fields: [authorId], references: [id])
+  authorOrgId String?  @db.Uuid
+  authorOrg   Organisation? @relation("authorOrg", fields: [authorOrgId], references: [id])
+  // structured template
+  technical   Int
+  tactical    Int
+  physical    Int
+  mentality   Int
+  attitude    Int
+  potential   String
+  weaknesses  String
+  nextStep    String
+  notes       String?
+  matchContext String?
+  published   Boolean  @default(false)
+  sha256      String?
+  createdAt   DateTime @default(now())
+
+  @@index([playerId, published])
+  @@index([authorId])
+}
+
+// -------------------------------------------------------- marketplace
+
+model Opportunity {
+  id          String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  orgId       String            @db.Uuid
+  org         Organisation      @relation(fields: [orgId], references: [id])
+  kind        OpportunityKind
+  status      OpportunityStatus @default(DRAFT)
+  title       String
+  description String
+  // structured, zod-validated per criteriaVersion:
+  // { positions, ageBand, foot, region, level, budgetBand… }
+  criteria        Json
+  criteriaVersion Int      @default(1)
+  featured        Boolean  @default(false)
+  expiresAt       DateTime?
+  publishedAt     DateTime?
+  closedAt        DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  applications Application[]
+
+  @@index([status, kind, expiresAt])
+  @@index([orgId, status])
+}
+
+model Application {
+  id             String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  opportunityId  String            @db.Uuid
+  opportunity    Opportunity       @relation(fields: [opportunityId], references: [id])
+  playerId       String            @db.Uuid
+  player         PlayerProfile     @relation(fields: [playerId], references: [id])
+  status         ApplicationStatus @default(SUBMITTED)
+  message        String?
+  // required when applicant is a minor (enforced by trigger + service):
+  consentId      String?           @db.Uuid
+  consent        ConsentRecord?    @relation(fields: [consentId], references: [id])
+  outcome        TrialOutcome?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  @@unique([opportunityId, playerId])
+  @@index([playerId, status])
+  @@index([opportunityId, status])
+}
+
+model TrialOutcome {
+  id                  String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  applicationId       String      @unique @db.Uuid
+  application         Application @relation(fields: [applicationId], references: [id])
+  result              String // attended / signed / not-progressed…
+  notes               String?
+  educationGuarantee  Boolean     @default(false)
+  recordedById        String      @db.Uuid
+  createdAt           DateTime    @default(now())
+}
+
+// ------------------------------------------- representation & deals
+
+model Mandate {
+  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  agentId       String        @db.Uuid
+  agent         User          @relation("agent", fields: [agentId], references: [id])
+  playerId      String        @db.Uuid
+  player        PlayerProfile @relation(fields: [playerId], references: [id])
+  status        MandateStatus @default(DRAFT)
+  startsAt      DateTime?
+  endsAt        DateTime?
+  territories   String[]
+  exclusive     Boolean       @default(false)
+  commissionBps Int?
+  licenceRef    String?
+  termsDocId    String?       @db.Uuid
+  sha256        String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  consents  ConsentRecord[] @relation("mandateConsents")
+  dealRooms DealRoom[]
+
+  @@index([playerId, status])
+  @@index([agentId, status])
+}
+
+model DealRoom {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  mandateId   String?   @db.Uuid
+  mandate     Mandate?  @relation(fields: [mandateId], references: [id])
+  compliance  Json      @default("{}") // checklist state
+  createdById String    @db.Uuid
+  createdAt   DateTime  @default(now())
+  closedAt    DateTime?
+
+  members    DealMember[]
+  milestones DealMilestone[]
+  documents  Document[]      @relation("dealDocuments")
+  notes      DealNote[]
+  threads    Thread[]
+}
+
+model DealMember {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  dealId    String   @db.Uuid
+  deal      DealRoom @relation(fields: [dealId], references: [id])
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id])
+  roleInDeal String // buyer, seller, agent, observer, counsel
+  createdAt DateTime @default(now())
+
+  @@unique([dealId, userId])
+}
+
+model DealMilestone {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  dealId      String    @db.Uuid
+  deal        DealRoom  @relation(fields: [dealId], references: [id])
+  title       String
+  dueAt       DateTime?
+  completedAt DateTime?
+  confirmations Json    @default("[]") // party confirmations
+  sha256      String?
+  createdAt   DateTime  @default(now())
+
+  @@index([dealId])
+}
+
+model DealNote {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  dealId    String   @db.Uuid
+  deal      DealRoom @relation(fields: [dealId], references: [id])
+  authorId  String   @db.Uuid
+  body      String
+  createdAt DateTime @default(now())
+
+  @@index([dealId, createdAt])
+}
+
+model Document {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ownerOrgId  String?  @db.Uuid
+  ownerOrg    Organisation? @relation("orgDocuments", fields: [ownerOrgId], references: [id])
+  dealId      String?  @db.Uuid
+  deal        DealRoom? @relation("dealDocuments", fields: [dealId], references: [id])
+  verificationCaseId String? @db.Uuid
+  verificationCase   VerificationCase? @relation(fields: [verificationCaseId], references: [id])
+  name        String
+  storageKey  String
+  mimeType    String
+  sha256      String
+  piiClass    PiiClass @default(INTERNAL)
+  kmsKeyRef   String?
+  watermarked Boolean  @default(false)
+  uploadedById String  @db.Uuid
+  createdAt   DateTime @default(now())
+  deletedAt   DateTime?
+
+  @@index([ownerOrgId])
+  @@index([dealId])
+}
+
+// ------------------------------------------------ trust & compliance
+
+model ConsentRecord {
+  id             String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  subjectUserId  String         @db.Uuid
+  subject        User           @relation("subject", fields: [subjectUserId], references: [id])
+  guardianId     String?        @db.Uuid
+  guardian       User?          @relation("guardianSigner", fields: [guardianId], references: [id])
+  purpose        ConsentPurpose
+  state          ConsentState   @default(PENDING)
+  policyVersion  String
+  mandateId      String?        @db.Uuid
+  mandate        Mandate?       @relation("mandateConsents", fields: [mandateId], references: [id])
+  artefactSha256 String? // hash of the signed artefact (what exactly was agreed)
+  grantedAt      DateTime?
+  withdrawnAt    DateTime?
+  createdAt      DateTime       @default(now())
+
+  applications Application[]
+
+  @@index([subjectUserId, purpose, state])
+}
+
+model VerificationCase {
+  id            String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  subjectType   VerificationSubjectType
+  subjectUserId String?                 @db.Uuid
+  subjectUser   User?                   @relation("subjectUser", fields: [subjectUserId], references: [id])
+  subjectOrgId  String?                 @db.Uuid
+  subjectOrg    Organisation?           @relation("subjectOrg", fields: [subjectOrgId], references: [id])
+  recordRef     String? // for DOCUMENT/MANDATE/MEDIA subjects
+  badgeType     BadgeType?
+  decision      VerificationDecision    @default(PENDING)
+  reviewerId    String?                 @db.Uuid
+  reviewer      User?                   @relation("reviewer", fields: [reviewerId], references: [id])
+  reason        String?
+  decidedAt     DateTime?
+  expiresAt     DateTime?
+  createdAt     DateTime                @default(now())
+
+  evidence Document[]
+  badge    Badge?
+
+  @@index([decision, createdAt])
+  @@index([subjectUserId])
+  @@index([subjectOrgId])
+}
+
+model Badge {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  type      BadgeType
+  caseId    String    @unique @db.Uuid
+  case      VerificationCase @relation(fields: [caseId], references: [id])
+  playerId  String?   @db.Uuid
+  player    PlayerProfile? @relation("playerBadges", fields: [playerId], references: [id])
+  orgId     String?   @db.Uuid
+  org       Organisation?  @relation("orgBadges", fields: [orgId], references: [id])
+  grantedAt DateTime  @default(now())
+  revokedAt DateTime?
+
+  @@index([type, revokedAt])
+}
+
+model AuditEvent {
+  id         BigInt   @id @default(autoincrement())
+  actorId    String?  @db.Uuid
+  actor      User?    @relation("actor", fields: [actorId], references: [id])
+  action     String // "mandate.consented", "document.viewed"…
+  recordType String
+  recordId   String
+  beforeHash String?
+  afterHash  String?
+  ip         String?
+  meta       Json?
+  prevHash   String // hash chain for tamper evidence
+  selfHash   String
+  createdAt  DateTime @default(now())
+
+  @@index([recordType, recordId, createdAt])
+  @@index([actorId, createdAt])
+}
+
+model Anchor {
+  id         String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  recordType AnchorRecordType
+  recordId   String
+  sha256     String
+  nonce      String // salt; stored off-chain only
+  batchId    String?          @db.Uuid
+  batch      AnchorBatch?     @relation(fields: [batchId], references: [id])
+  merklePath Json?
+  createdAt  DateTime         @default(now())
+
+  @@unique([recordType, recordId, sha256])
+  @@index([batchId])
+}
+
+model AnchorBatch {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  merkleRoot  String
+  chainId     Int
+  contractRef String
+  txHash      String?
+  blockNumber BigInt?
+  confirmedAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  anchors Anchor[]
+
+  @@index([confirmedAt])
+}
+
+model FraudSignal {
+  id            String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  subjectUserId String?          @db.Uuid
+  subjectUser   User?            @relation("subjectUser", fields: [subjectUserId], references: [id])
+  subjectOrgId  String?          @db.Uuid
+  subjectOrg    Organisation?    @relation("subjectOrg", fields: [subjectOrgId], references: [id])
+  type          String // "doc_reuse", "licence_mismatch", "velocity", "grooming_pattern"…
+  score         Float
+  features      Json
+  state         FraudSignalState @default(OPEN)
+  reviewedById  String?          @db.Uuid
+  createdAt     DateTime         @default(now())
+
+  @@index([state, score])
+}
+
+// ------------------------------------------------------ communications
+
+model Thread {
+  id        String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  kind      ThreadKind
+  dealId    String?    @db.Uuid
+  deal      DealRoom?  @relation(fields: [dealId], references: [id])
+  createdAt DateTime   @default(now())
+
+  members  ThreadMember[]
+  messages Message[]
+
+  @@index([kind])
+}
+
+model ThreadMember {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  threadId   String   @db.Uuid
+  thread     Thread   @relation(fields: [threadId], references: [id])
+  userId     String   @db.Uuid
+  user       User     @relation(fields: [userId], references: [id])
+  actingOrgId String? @db.Uuid // when speaking for an org
+  canWrite   Boolean  @default(true) // minors read-only until guardian approves
+  lastReadAt DateTime?
+  createdAt  DateTime @default(now())
+
+  @@unique([threadId, userId])
+  @@index([userId])
+}
+
+model Message {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  threadId  String    @db.Uuid
+  thread    Thread    @relation(fields: [threadId], references: [id])
+  senderId  String    @db.Uuid
+  sender    User      @relation(fields: [senderId], references: [id])
+  body      String
+  flagged   Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
+
+  @@index([threadId, createdAt(sort: Desc)])
+}
+
+model Notification {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String    @db.Uuid
+  user      User      @relation(fields: [userId], references: [id])
+  channel   String // inapp | email | sms | whatsapp | push
+  template  String
+  payload   Json
+  status    String    @default("queued")
+  sentAt    DateTime?
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId, readAt])
+  @@index([status, createdAt])
+}
+
+// --------------------------------------------------------- platform
+
+model EventOutbox {
+  id          BigInt    @id @default(autoincrement())
+  eventType   String // "rep.mandate.consented.v1"
+  aggregateId String
+  payload     Json
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([publishedAt, createdAt])
+}
+
+model IdempotencyKey {
+  key        String   @id
+  userId     String   @db.Uuid
+  requestHash String
+  response   Json?
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+model WebhookEndpoint {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ownerOrgId String   @db.Uuid
+  url        String
+  secretHash String
+  events     String[]
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  deliveries WebhookDelivery[]
+}
+
+model WebhookDelivery {
+  id         BigInt          @id @default(autoincrement())
+  endpointId String          @db.Uuid
+  endpoint   WebhookEndpoint @relation(fields: [endpointId], references: [id])
+  eventType  String
+  payload    Json
+  attempts   Int             @default(0)
+  status     String          @default("pending")
+  lastError  String?
+  deliveredAt DateTime?
+  createdAt  DateTime        @default(now())
+
+  @@index([status, createdAt])
+}
+
+model FeatureFlagOverride {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  flag      String
+  scopeType String // user | org | global
+  scopeId   String?
+  value     Boolean
+  createdAt DateTime @default(now())
+
+  @@unique([flag, scopeType, scopeId])
+}
