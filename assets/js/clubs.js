@@ -49,7 +49,7 @@
         ['Guardian portal', 'Active · 178 families']
       ],
       alumni: [
-        ['Amara Diallo (16, FW)', 'Current · combine selection'],
+        ['Amara Diallo (16, FW)', 'Current · combine selection', 'passport.html#amara'],
         ['Ibrahima Sarr (19, MF)', 'Pro academy · Morocco'],
         ['Ousmane Ba (20, DF)', 'First division · Senegal']
       ]
@@ -91,7 +91,7 @@
         ['Guardian portal', 'Active · 289 families']
       ],
       alumni: [
-        ['Mateus Rocha (17, MF)', 'Current · combine selection'],
+        ['Mateus Rocha (17, MF)', 'Current · combine selection', 'passport.html#mateus'],
         ['João Ferraz (20, FW)', 'Série A academy · Brazil'],
         ['Valentina Reyes (16, MF)', 'Partner exchange · Colombia']
       ]
@@ -133,7 +133,7 @@
         ['Guardian portal', 'Active · 126 families']
       ],
       alumni: [
-        ['Yuki Tanaka (15, GK)', 'Current · combine selection'],
+        ['Yuki Tanaka (15, GK)', 'Current · combine selection', 'passport.html#yuki'],
         ['Ren Takeda (18, DF)', 'J-League academy · Japan'],
         ['Sora Fujimoto (19, MF)', 'University first team · Japan']
       ]
@@ -175,7 +175,7 @@
         ['Guardian portal', 'Active · 171 families']
       ],
       alumni: [
-        ['Lena Kovačić (16, CB)', 'Current · regional captain'],
+        ['Lena Kovačić (16, CB)', 'Current · regional captain', 'passport.html#lena'],
         ['Petra Novak (19, FW)', 'First-division women · Croatia'],
         ['Marko Šimić (20, GK)', 'Pro academy · Austria']
       ]
@@ -221,7 +221,13 @@
     list.textContent = '';
     rows.forEach(function (row) {
       var li = el('li');
-      li.appendChild(el('span', null, row[0]));
+      if (row[2]) {
+        var a = el('a', 'row-link', row[0]);
+        a.href = row[2];
+        li.appendChild(a);
+      } else {
+        li.appendChild(el('span', null, row[0]));
+      }
       li.appendChild(el('span', 'ok', row[1]));
       list.appendChild(li);
     });
