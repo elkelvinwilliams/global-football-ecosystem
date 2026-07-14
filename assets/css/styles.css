@@ -365,6 +365,7 @@ body.nav-open { overflow: hidden; }
 }
 .card-link svg { width: 16px; height: 16px; transition: transform var(--t-fast) var(--ease); }
 .card-link:hover svg { transform: translateX(4px); }
+.section-link { margin-top: 1.8rem; }
 .card .tag, .video-tags .tag {
   align-self: flex-start;
   font-size: 0.7rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase;
