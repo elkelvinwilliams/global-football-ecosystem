@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clubs &amp; Academies — Global Football Ecosystem</title>
+  <meta name="description" content="The GFE club passport: every club and academy verified — playing style on film, development record, facilities, compliance and alumni. Illustrative demo." />
+  <meta name="theme-color" content="#06130d" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='24' r='21' fill='none' stroke='%23c6f94e' stroke-width='3'/%3E%3Cpath d='M24 15l8.5 6.2-3.2 10H18.7l-3.2-10z' fill='%23c6f94e'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header">
+    <div class="container nav">
+      <a href="index.html" class="brand" aria-label="Global Football Ecosystem — home">
+        <svg class="mark" width="38" height="38" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="2"/>
+          <path d="M24 15l8.5 6.2-3.2 10H18.7l-3.2-10z" fill="currentColor"/>
+          <path d="M24 4v11M32.5 21.2L42 17M29.3 31.2l6.2 9.3M18.7 31.2l-6.2 9.3M15.5 21.2L6 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="brand-name">GFE<small>Global&nbsp;Football&nbsp;Ecosystem</small></span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary">
+        <a href="ecosystem.html">Ecosystem</a>
+        <a href="clubs.html" aria-current="page">Clubs</a>
+        <a href="talent.html">Pathway</a>
+        <a href="passport.html">Passport</a>
+        <a href="vision.html">Vision</a>
+        <a href="scouts.html">Scouts</a>
+        <a href="fans.html">Fans</a>
+        <a href="insights.html">Insights</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+
+      <div class="nav-cta">
+        <a href="contact.html" class="btn btn-volt">Join the network
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="ecosystem.html">Ecosystem</a>
+    <a href="clubs.html" aria-current="page">Clubs</a>
+    <a href="talent.html">Pathway</a>
+    <a href="passport.html">Passport</a>
+    <a href="vision.html">Vision</a>
+    <a href="scouts.html">Scouts</a>
+    <a href="fans.html">Fans</a>
+    <a href="insights.html">Insights</a>
+    <a href="contact.html">Contact</a>
+    <a href="contact.html" class="btn btn-volt">Join the network</a>
+  </div>
+
+  <main>
+    <!-- ============ PAGE HERO ============ -->
+    <section class="page-hero">
+      <div class="container">
+        <span class="eyebrow reveal">Clubs &amp; academies</span>
+        <h1 class="reveal reveal-d1">Your football. <span class="volt">On the record.</span></h1>
+        <p class="lead reveal reveal-d2">Every club and academy in the network carries its own passport — playing style on film, development record, facilities and compliance, all verified. Four illustrative club passports below, all demo data.</p>
+      </div>
+    </section>
+
+    <!-- ============ STYLE FILM FLOW ============ -->
+    <section>
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Playing style, on film</span>
+          <h2 class="section-title">Every club passport starts with a film.</h2>
+        </div>
+
+        <div class="grid grid-3">
+          <article class="card reveal">
+            <span class="tag">Step 1</span>
+            <h3>Film the prompts</h3>
+            <p>A guided template — eight prompts covering build-up, pressing, transitions and set pieces. Film your own sessions and matches; any modern phone will do.</p>
+          </article>
+          <article class="card reveal reveal-d1">
+            <span class="tag">Step 2</span>
+            <h3>Vision certifies it</h3>
+            <p>GFE Vision checks the footage is really yours, really recent, and cuts it against your match data — so the film shows how you actually play, not how you'd like to.</p>
+          </article>
+          <article class="card reveal reveal-d2">
+            <span class="tag">Step 3</span>
+            <h3>It lives on your passport</h3>
+            <p>The style film sits on your club passport beside your record. Scouts and parents see your football before they see your results.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CLUB PASSPORT DEMO ============ -->
+    <section class="bg-alt">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">The club passport</span>
+          <h2 class="section-title">Everything a club is, in one place.</h2>
+        </div>
+
+        <!-- Club switcher -->
+        <div class="passport-switch reveal" role="tablist" aria-label="Choose a demo club passport">
+          <button class="pswitch" role="tab" id="tab-etoile" data-club="etoile" aria-selected="true">
+            <span class="chip-avatar" aria-hidden="true">ED</span>
+            <span class="chip-text">Étoile de Dakar<small>Academy · Senegal</small></span>
+          </button>
+          <button class="pswitch" role="tab" id="tab-recife" data-club="recife" aria-selected="false" tabindex="-1">
+            <span class="chip-avatar" aria-hidden="true">RF</span>
+            <span class="chip-text">Recife Futuro FC<small>Academy · Brazil</small></span>
+          </button>
+          <button class="pswitch" role="tab" id="tab-kawasaki" data-club="kawasaki" aria-selected="false" tabindex="-1">
+            <span class="chip-avatar" aria-hidden="true">KV</span>
+            <span class="chip-text">Kawasaki Verde<small>Academy · Japan</small></span>
+          </button>
+          <button class="pswitch" role="tab" id="tab-sava" data-club="sava" aria-selected="false" tabindex="-1">
+            <span class="chip-avatar" aria-hidden="true">SA</span>
+            <span class="chip-text">Sava Academy Zagreb<small>Academy · Croatia</small></span>
+          </button>
+        </div>
+
+        <div class="dash reveal" id="clubDash" role="tabpanel" tabindex="0" aria-labelledby="tab-etoile">
+          <div class="dash-grid">
+            <!-- Identity card -->
+            <div class="id-card">
+              <div class="avatar" id="cbAvatar" aria-hidden="true">ED</div>
+              <h3 id="cbName">Étoile de Dakar</h3>
+              <span class="verified">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                GFE-licensed · identity &amp; governance verified
+              </span>
+              <div class="id-meta" id="cbMeta">
+                <div><div class="k">Founded</div><div class="v">2014</div></div>
+                <div><div class="k">City</div><div class="v">Dakar, Senegal</div></div>
+                <div><div class="k">Age groups</div><div class="v">U-12 – U-17</div></div>
+                <div><div class="k">Badged coaches</div><div class="v">14</div></div>
+                <div><div class="k">Licence tier</div><div class="v">Tier 1</div></div>
+                <div><div class="k">Passport ID</div><div class="v">GFE-CLB-SN-0112</div></div>
+              </div>
+              <div class="worth" id="cbLicence">
+                <div class="k">GFE club licence</div>
+                <div class="v">Tier 1</div>
+                <div class="trend">Renewed Mar 2026 · audit passed</div>
+                <div class="note">Safeguarding &amp; education: fully compliant</div>
+              </div>
+            </div>
+
+            <!-- Right column -->
+            <div style="display:grid; gap:1.4rem; align-content:start;">
+              <!-- Style film -->
+              <div class="panel style-video">
+                <h4 id="cbFilmTitle">Playing style · Étoile de Dakar</h4>
+                <video id="cbVideo" controls muted loop playsinline preload="metadata"
+                       poster="assets/video/style-etoile.jpg" aria-label="Playing style film">
+                  <source src="assets/video/style-etoile.mp4" type="video/mp4" />
+                  <source src="assets/video/style-etoile.webm" type="video/webm" />
+                  Your browser doesn't support embedded video.
+                </video>
+                <div class="video-tags" id="cbTags">
+                  <span class="tag">High press</span><span class="tag">Vertical transitions</span><span class="tag">4-3-3</span>
+                </div>
+                <p class="panel-note">Filmed by the club against the GFE style template; certified against match data by GFE Vision. Demo film — fictional club.</p>
+              </div>
+
+              <div class="tiles" id="cbTiles">
+                <div class="tile"><div class="v">212</div><div class="k">Players registered</div></div>
+                <div class="tile"><div class="v">186</div><div class="k">Player passports issued</div></div>
+                <div class="tile"><div class="v">7</div><div class="k">Alumni in pro academies</div></div>
+                <div class="tile"><div class="v">12</div><div class="k">Combine selections 2026</div></div>
+              </div>
+
+              <div class="dash-cols">
+                <div style="display:grid; gap:1.4rem; align-content:start;">
+                  <div class="panel">
+                    <h4 id="cbDnaTitle">Style DNA · vs GFE network U-17</h4>
+                    <div class="bars" id="cbDna"></div>
+                  </div>
+                  <div class="panel">
+                    <h4>Development record</h4>
+                    <ul class="timeline" id="cbTimeline"></ul>
+                  </div>
+                </div>
+
+                <div style="display:grid; gap:1.4rem; align-content:start;">
+                  <div class="panel">
+                    <h4>Facilities &amp; staff</h4>
+                    <ul class="rows" id="cbFacilities"></ul>
+                  </div>
+                  <div class="panel">
+                    <h4>Compliance &amp; safeguarding</h4>
+                    <ul class="rows" id="cbCompliance"></ul>
+                  </div>
+                  <div class="panel">
+                    <h4>Notable alumni</h4>
+                    <ul class="rows" id="cbAlumni"></ul>
+                  </div>
+                </div>
+              </div>
+
+              <p class="dash-note">Illustrative preview — demo data only; every club, academy, player and company shown is fictional.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ WHY ============ -->
+    <section>
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Why it matters</span>
+          <h2 class="section-title">Clubs get found the same way players do.</h2>
+        </div>
+
+        <div class="grid grid-3">
+          <article class="card reveal">
+            <span class="tag">Identity</span>
+            <h3>Style is your signature</h3>
+            <p>Parents choose academies, players choose pathways, and partner clubs choose affiliates — on football, not on brochures. Your film shows exactly what you teach.</p>
+          </article>
+          <article class="card reveal reveal-d1">
+            <span class="tag">Trust</span>
+            <h3>Verified, like a player</h3>
+            <p>Licence, safeguarding record, coach badges and education plans — audited and on the passport. A Tier 1 badge means the same thing in every country.</p>
+          </article>
+          <article class="card reveal reveal-d2">
+            <span class="tag">Reward</span>
+            <h3>Development pays back</h3>
+            <p>Passports keep your development years attached to every player forever — so when alumni move up, training compensation finds you automatically.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="bg-alt">
+      <div class="container">
+        <div class="cta-panel reveal">
+          <span class="eyebrow" style="justify-content:center;">For clubs &amp; academies</span>
+          <h2>Put your club <span class="volt">on the map.</span></h2>
+          <p class="lead">Licensing is free for grassroots academies. Register, film your style, and let the network see your football.</p>
+          <div class="cta-actions">
+            <a href="contact.html" class="btn btn-volt">Register your club
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a href="passport.html" class="btn btn-outline">See a player passport</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="brand" aria-label="Global Football Ecosystem — home">
+            <svg class="mark" width="38" height="38" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+              <circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="2"/>
+              <path d="M24 15l8.5 6.2-3.2 10H18.7l-3.2-10z" fill="currentColor"/>
+              <path d="M24 4v11M32.5 21.2L42 17M29.3 31.2l6.2 9.3M18.7 31.2l-6.2 9.3M15.5 21.2L6 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span class="brand-name">GFE<small>Global&nbsp;Football&nbsp;Ecosystem</small></span>
+          </a>
+          <p>Connecting every side of the world's game — so talent is found, developed and rewarded wherever it plays.</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Ecosystem</h4>
+          <ul>
+            <li><a href="ecosystem.html#players">Players</a></li>
+            <li><a href="ecosystem.html#clubs">Clubs</a></li>
+            <li><a href="ecosystem.html#academies">Academies</a></li>
+            <li><a href="ecosystem.html#scouts">Scouts</a></li>
+            <li><a href="ecosystem.html#agents">Agents</a></li>
+            <li><a href="ecosystem.html#fans">Fans</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Network</h4>
+          <ul>
+            <li><a href="talent.html">Talent pathway</a></li>
+            <li><a href="passport.html">Player passport</a></li>
+            <li><a href="clubs.html">Club passport</a></li>
+            <li><a href="vision.html">GFE Vision</a></li>
+            <li><a href="scouts.html">For scouts &amp; clubs</a></li>
+            <li><a href="fans.html">Fans &amp; partners</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="contact.html">Partner with us</a></li>
+            <li><a href="contact.html">Careers</a></li>
+            <li><a href="contact.html">Press</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-legal">
+        <span>© <span id="year">2026</span> Global Football Ecosystem. A demonstration project — not affiliated with FIFA or any confederation.</span>
+        <span>One game. One world. One ecosystem.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/clubs.js" defer></script>
+</body>
+</html>
