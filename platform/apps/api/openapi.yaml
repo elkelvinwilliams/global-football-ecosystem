@@ -1,0 +1,52 @@
+openapi: 3.1.0
+info:
+  title: GFE Platform API
+  version: 1.0.0-draft
+  description: >
+    Public REST contract for the Global Football Ecosystem. Full endpoint
+    map in docs/02-architecture/api.md; this file grows with implementation
+    and is diff-checked in CI (contract tests).
+servers:
+  - url: https://api.gfe.football/v1
+security:
+  - bearerAuth: []
+paths:
+  /auth/otp/request:
+    post:
+      security: []
+      summary: Request a one-time passcode
+      responses: { "204": { description: OTP dispatched } }
+  /auth/otp/verify:
+    post:
+      security: []
+      summary: Verify OTP and issue token pair
+      responses: { "200": { description: Access + refresh tokens } }
+  /me:
+    get:
+      summary: Current account with roles and org memberships
+      responses: { "200": { description: Account } }
+  /players/{id}:
+    get:
+      summary: Player profile (field-level privacy applied)
+      parameters: [{ name: id, in: path, required: true, schema: { type: string } }]
+      responses: { "200": { description: Player } }
+  /opportunities:
+    get:
+      summary: Opportunity board with facets
+      responses: { "200": { description: Paginated opportunities } }
+  /mandates:
+    post:
+      summary: Draft a representation mandate
+      responses: { "201": { description: Mandate draft } }
+  /verify/anchor:
+    get:
+      security: []
+      summary: Publicly verify a record hash against on-chain anchors
+      parameters:
+        - { name: type, in: query, required: true, schema: { type: string } }
+        - { name: id, in: query, required: true, schema: { type: string } }
+        - { name: hash, in: query, required: true, schema: { type: string } }
+      responses: { "200": { description: Inclusion proof + chain reference } }
+components:
+  securitySchemes:
+    bearerAuth: { type: http, scheme: bearer, bearerFormat: JWT }
