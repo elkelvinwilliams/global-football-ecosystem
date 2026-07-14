@@ -43,7 +43,7 @@ contract MandateRegistry is AccessControl {
         onlyRole(REGISTRAR_ROLE)
     {
         require(entries[mandateHash].status == Status.None, "exists");
-        entries[mandateHash] = Entry(Status.Registered, notBefore, notAfter, 0);
+        entries[mandateHash] = Entry(Status.Registered, notBefore, notAfter, bytes32(0));
         emit Registered(mandateHash, notBefore, notAfter);
     }
 
