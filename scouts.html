@@ -77,7 +77,12 @@
     <section class="bg-alt">
       <div class="container">
         <div class="filters reveal" aria-label="Filter players">
-          <div class="filter-group" role="group" aria-label="Filter by position">
+          <div class="filter-group" role="group" aria-label="Browse players or clubs">
+            <span class="filter-label">Browse</span>
+            <button class="chip" data-filter="view" data-value="players" aria-pressed="true">Players</button>
+            <button class="chip" data-filter="view" data-value="clubs" aria-pressed="false">Clubs &amp; academies</button>
+          </div>
+          <div class="filter-group" role="group" aria-label="Filter by position" id="posGroup">
             <span class="filter-label">Position</span>
             <button class="chip" data-filter="pos" data-value="all" aria-pressed="true">All</button>
             <button class="chip" data-filter="pos" data-value="Forward" aria-pressed="false">Forwards</button>

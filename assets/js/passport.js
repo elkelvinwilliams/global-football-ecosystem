@@ -19,6 +19,8 @@
 
   var PLAYERS = {
     amara: {
+      club: 'etoile',
+      clubName: 'Étoile de Dakar',
       initials: 'AD',
       name: 'Amara Diallo',
       meta: [
@@ -83,6 +85,8 @@
     },
 
     mateus: {
+      club: 'recife',
+      clubName: 'Recife Futuro FC',
       initials: 'MR',
       name: 'Mateus Rocha',
       meta: [
@@ -147,6 +151,8 @@
     },
 
     yuki: {
+      club: 'kawasaki',
+      clubName: 'Kawasaki Verde',
       initials: 'YT',
       name: 'Yuki Tanaka',
       meta: [
@@ -211,6 +217,8 @@
     },
 
     lena: {
+      club: 'sava',
+      clubName: 'Sava Academy Zagreb',
       initials: 'LK',
       name: 'Lena Kovačić',
       meta: [
@@ -506,6 +514,14 @@
     els.worth.appendChild(el('div', 'v', player.worth.amount));
     els.worth.appendChild(el('div', 'trend', '▲ ' + player.worth.trend));
     els.worth.appendChild(el('div', 'note', player.worth.note));
+
+    var clubLink = document.getElementById('ppClubLink');
+    if (clubLink) {
+      clubLink.href = 'clubs.html#' + player.club;
+      clubLink.textContent = 'Club passport · ' + player.clubName;
+      clubLink.insertAdjacentHTML('beforeend',
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+    }
 
     els.matches.textContent = '';
     player.matches.forEach(function (m) {

@@ -27,9 +27,25 @@
       stats: ['Command of area · 87th', '9 clean sheets'], passport: false }
   ];
 
-  var state = { pos: 'all', region: 'all' };
+  var CLUBPOOL = [
+    { key: 'etoile', initials: 'ED', name: 'Étoile de Dakar', country: 'Senegal', region: 'Africa',
+      stats: ['High press · vertical transitions', '212 players · 12 combine picks'], passport: true },
+    { key: 'recife', initials: 'RF', name: 'Recife Futuro FC', country: 'Brazil', region: 'South America',
+      stats: ['Possession · third-man play', '324 players · 9 combine picks'], passport: true },
+    { key: 'kawasaki', initials: 'KV', name: 'Kawasaki Verde', country: 'Japan', region: 'Asia',
+      stats: ['Compact block · sweeper-keeper', '148 players · 6 combine picks'], passport: true },
+    { key: 'sava', initials: 'SA', name: 'Sava Academy Zagreb', country: 'Croatia', region: 'Europe',
+      stats: ['High line · set pieces', '196 players · 8 combine picks'], passport: true },
+    { key: 'nairobi', initials: 'NR', name: 'Nairobi Rise', country: 'Kenya', region: 'Africa',
+      stats: ['Counter-press · wing overloads', '164 players · 5 combine picks'], passport: false },
+    { key: 'altiplano', initials: 'AF', name: 'Altiplano FC', country: 'Bolivia', region: 'South America',
+      stats: ['Direct play · altitude conditioning', '117 players · 3 combine picks'], passport: false }
+  ];
+
+  var state = { view: 'players', pos: 'all', region: 'all' };
   var shortlist = {};
   var requested = {};
+  var posGroup = document.getElementById('posGroup');
 
   var resultCount = document.getElementById('resultCount');
   var shortlistCount = document.getElementById('shortlistCount');
@@ -47,14 +63,15 @@
     shortlistCount.textContent = 'Shortlist · ' + n;
   }
 
-  function card(p) {
+  function card(p, isClub) {
     var art = el('article', 'scout-card');
 
     var head = el('div', 'sc-head');
     head.appendChild(el('span', 'chip-avatar', p.initials));
     var idBox = el('div', 'sc-id');
     idBox.appendChild(el('h3', null, p.name));
-    idBox.appendChild(el('div', 'sc-sub', p.pos + ' · ' + p.age + ' · ' + p.country));
+    idBox.appendChild(el('div', 'sc-sub',
+      isClub ? 'Academy · ' + p.country : p.pos + ' · ' + p.age + ' · ' + p.country));
     head.appendChild(idBox);
 
     var star = el('button', 'star');
@@ -75,8 +92,8 @@
 
     var row = el('div', 'sc-actions');
     if (p.passport) {
-      var a = el('a', 'btn btn-outline sc-btn', 'View passport');
-      a.href = 'passport.html#' + p.key;
+      var a = el('a', 'btn btn-outline sc-btn', isClub ? 'View club passport' : 'View passport');
+      a.href = (isClub ? 'clubs.html#' : 'passport.html#') + p.key;
       row.appendChild(a);
     } else {
       var b = el('button', 'btn btn-outline sc-btn', requested[p.key] ? 'Requested ✓' : 'Request access');
@@ -88,7 +105,7 @@
       });
       row.appendChild(b);
     }
-    var badge = el('span', 'sc-verified', 'GFE-verified');
+    var badge = el('span', 'sc-verified', isClub ? 'GFE-licensed' : 'GFE-verified');
     row.appendChild(badge);
     art.appendChild(row);
 
@@ -96,13 +113,18 @@
   }
 
   function renderGrid() {
-    var visible = POOL.filter(function (p) {
-      return (state.pos === 'all' || p.pos === state.pos) &&
+    var isClubs = state.view === 'clubs';
+    if (posGroup) posGroup.hidden = isClubs;
+
+    var pool = isClubs ? CLUBPOOL : POOL;
+    var visible = pool.filter(function (p) {
+      return (isClubs || state.pos === 'all' || p.pos === state.pos) &&
              (state.region === 'all' || p.region === state.region);
     });
     grid.textContent = '';
-    visible.forEach(function (p) { grid.appendChild(card(p)); });
-    resultCount.textContent = visible.length + (visible.length === 1 ? ' player' : ' players');
+    visible.forEach(function (p) { grid.appendChild(card(p, isClubs)); });
+    var noun = isClubs ? ' club' : ' player';
+    resultCount.textContent = visible.length + noun + (visible.length === 1 ? '' : 's');
     emptyState.hidden = visible.length !== 0;
   }
 
