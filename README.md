@@ -1,12 +1,10 @@
 # Global Football Ecosystem (GFE)
 
-**This repository now holds three things:**
+**This repository is the marketing/demo site** — live on GitHub Pages.
 
-| Tree | What it is |
-|------|-----------|
-| `/` (this site) | The marketing/demo site — live on GitHub Pages |
-| [`/docs`](docs/README.md) | Investor-grade platform documentation: PRD, SRS, architecture, database, API, blockchain, security, AI, infrastructure, roadmaps, GTM |
-| [`/platform`](platform/README.md) | The platform codebase scaffold: TypeScript monorepo (Next.js + NestJS + Prisma), smart contracts, Docker, CI, Terraform |
+The platform codebase and company documentation live in
+[**elkelvinwilliams/gfe-platform**](https://github.com/elkelvinwilliams/gfe-platform)
+(TypeScript monorepo, Prisma schema, contracts, infra + the full docs suite).
 
 ---
 

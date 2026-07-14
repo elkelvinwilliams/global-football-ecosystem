@@ -1,6 +1,0 @@
-body {
-  background: var(--bg-base);
-  color: var(--ink-high);
-  font-family: Inter, system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-}

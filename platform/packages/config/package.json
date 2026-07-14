@@ -1,8 +1,0 @@
-{
-  "name": "@gfe/config",
-  "version": "0.1.0",
-  "files": [
-    "tsconfig.node.json",
-    "tsconfig.react.json"
-  ]
-}

@@ -1,9 +1,0 @@
-variable "name" {
-  type    = string
-  default = "gfe"
-}
-
-variable "region" {
-  type    = string
-  default = "af-south-1"
-}
