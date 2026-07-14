@@ -6,3 +6,4 @@ dist/
 coverage/
 artifacts/
 cache/
+dist-smoke/
