@@ -1,9 +1,0 @@
-node_modules/
-dist/
-.next/
-.turbo/
-.env
-coverage/
-artifacts/
-cache/
-dist-smoke/
