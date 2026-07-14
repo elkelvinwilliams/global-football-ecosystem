@@ -125,6 +125,14 @@
                 <div class="tile"><div class="v">96th</div><div class="k">Combine sprint percentile (U-17)</div></div>
               </div>
 
+              <div class="view-tabs" role="tablist" aria-label="Passport sections">
+                <button role="tab" id="vtab-overview" data-view="viewOverview" aria-selected="true">Overview</button>
+                <button role="tab" id="vtab-matches" data-view="viewMatches" aria-selected="false" tabindex="-1">Match log</button>
+                <button role="tab" id="vtab-growth" data-view="viewGrowth" aria-selected="false" tabindex="-1">Growth</button>
+                <button role="tab" id="vtab-edu" data-view="viewEdu" aria-selected="false" tabindex="-1">Education &amp; availability</button>
+              </div>
+
+              <div class="pview" id="viewOverview" role="tabpanel" aria-labelledby="vtab-overview">
               <div class="dash-cols">
                 <div style="display:grid; gap:1.4rem; align-content:start;">
                   <div class="panel">
@@ -187,6 +195,51 @@
                     <li><span>Commercial deals</span><span class="ok">None on record</span></li>
                   </ul>
                   <p class="panel-note">Every mandate and company working with the player is logged here and visible to guardians.</p>
+                </div>
+              </div>
+              </div><!-- /viewOverview -->
+
+              <div class="pview" id="viewMatches" role="tabpanel" aria-labelledby="vtab-matches" hidden>
+                <div class="panel">
+                  <h4>Match log · this season</h4>
+                  <div class="match-wrap">
+                    <table class="match-table">
+                      <thead>
+                        <tr><th>Date</th><th>Competition</th><th>Opponent</th><th>Result</th><th class="num">Min</th><th>Contribution</th><th class="num">Vision rating</th></tr>
+                      </thead>
+                      <tbody id="ppMatches"></tbody>
+                    </table>
+                  </div>
+                  <p class="panel-note">Every entry is certified by a registered official at the venue; ratings come from GFE Vision analysis of the certified footage.</p>
+                </div>
+              </div>
+
+              <div class="pview" id="viewGrowth" role="tabpanel" aria-labelledby="vtab-growth" hidden>
+                <div class="dash-cols">
+                  <div class="panel">
+                    <h4>Overall benchmark percentile · by term</h4>
+                    <div class="chart" id="chartPct"></div>
+                  </div>
+                  <div class="panel">
+                    <h4>Estimated market value · by term</h4>
+                    <div class="chart" id="chartVal"></div>
+                  </div>
+                </div>
+                <p class="panel-note" style="margin-top:0.9rem;">Growth is benchmarked against global age-group peers at each term; market values are illustrative.</p>
+              </div>
+
+              <div class="pview" id="viewEdu" role="tabpanel" aria-labelledby="vtab-edu" hidden>
+                <div class="dash-cols">
+                  <div class="panel">
+                    <h4>Education record</h4>
+                    <ul class="rows" id="ppEdu"></ul>
+                    <p class="panel-note">A registered education plan is a condition of every GFE academy partnership.</p>
+                  </div>
+                  <div class="panel">
+                    <h4>Availability &amp; wellbeing</h4>
+                    <ul class="rows" id="ppAvail"></ul>
+                    <p class="panel-note">Age-group workload limits are enforced across the network and flagged automatically.</p>
+                  </div>
                 </div>
               </div>
 

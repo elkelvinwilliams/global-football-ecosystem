@@ -1,7 +1,9 @@
 /* =====================================================================
    GLOBAL FOOTBALL ECOSYSTEM — Player passport demo
-   Renders four switchable demo passports from data. All players, clubs
-   and academies are fictional. Dependency-free; respects reduced motion.
+   Renders four switchable demo passports from data, each with four
+   sub-views (overview, match log, growth charts, education).
+   All players, clubs and academies are fictional. Dependency-free;
+   respects reduced motion.
    ===================================================================== */
 (function () {
   'use strict';
@@ -11,6 +13,9 @@
   if (!dash || !tabs.length) return;
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Terms used on the growth charts: two terms a year */
+  var TERMS = ['’24·1', '’24·2', '’25·1', '’25·2', '’26·1'];
 
   var PLAYERS = {
     amara: {
@@ -53,6 +58,27 @@
         ['Agent', 'None — guardian-managed'],
         ['Social media', 'NorthBank Social · 214K followers'],
         ['Commercial deals', 'None on record']
+      ],
+      matches: [
+        ['12 Jun 26', 'U-17 League', 'ASC Jaraaf U-17', 'W 3–1', '90', '2 G', '8.4'],
+        ['29 May 26', 'Regional combine', 'Combine XI · Accra', 'D 2–2', '80', '1 G · 1 A', '8.1'],
+        ['17 May 26', 'U-17 League', 'Dakar SC U-17', 'W 2–0', '90', '1 G', '7.9'],
+        ['03 May 26', 'U-17 Cup', 'Génération Espoir U-17', 'L 1–2', '90', '1 G', '7.6'],
+        ['19 Apr 26', 'U-17 League', 'Casa Sud U-17', 'W 4–0', '72', '2 G · 1 A', '8.8'],
+        ['05 Apr 26', 'U-17 League', 'Guédiawaye Nord U-17', 'W 1–0', '90', '—', '7.2']
+      ],
+      growth: { pct: [61, 68, 77, 85, 91], valueK: [90, 160, 320, 540, 850] },
+      education: [
+        ['School', 'Lycée de Thiès · enrolled'],
+        ['Attendance this term', '96%'],
+        ['GFE modules completed', 'Financial literacy · Media basics'],
+        ['Next education review', 'Sep 2026']
+      ],
+      availability: [
+        ['Current status', 'Fully available'],
+        ['Days missed this season', '4 · ankle knock (Oct)'],
+        ['Medical clearance', 'Valid · renewed May 2026'],
+        ['Workload flag', 'Normal · U-17 limits enforced']
       ]
     },
 
@@ -96,6 +122,27 @@
         ['Agent', 'Horizonte Sports Group · registered mandate'],
         ['Social media', 'Bola Criativa Mídia · 480K followers'],
         ['Commercial deals', '1 · boot partner, logged & visible']
+      ],
+      matches: [
+        ['08 Jun 26', 'U-18 State League', 'Recife Leste U-18', 'W 2–1', '90', '1 A', '8.2'],
+        ['25 May 26', 'U-18 State League', 'Olinda Mar U-18', 'D 1–1', '90', '1 G', '7.8'],
+        ['10 May 26', 'Combine scrimmage', 'Combine XI · São Paulo', 'W 3–2', '60', '2 A', '8.6'],
+        ['26 Apr 26', 'U-18 Cup', 'Salvador Baía U-18', 'W 1–0', '90', '1 A', '7.9'],
+        ['12 Apr 26', 'U-18 State League', 'Caruaru Serra U-18', 'L 0–1', '90', '—', '7.1'],
+        ['29 Mar 26', 'U-18 State League', 'Paulista Norte U-18', 'W 4–1', '78', '1 G · 2 A', '9.0']
+      ],
+      growth: { pct: [70, 74, 80, 86, 90], valueK: [250, 420, 700, 1050, 1400] },
+      education: [
+        ['School', 'Colégio Recife Norte · enrolled'],
+        ['Attendance this term', '93%'],
+        ['GFE modules completed', 'Financial literacy · Contracts 101'],
+        ['Next education review', 'Aug 2026']
+      ],
+      availability: [
+        ['Current status', 'Fully available'],
+        ['Days missed this season', '0'],
+        ['Medical clearance', 'Valid · renewed Mar 2026'],
+        ['Workload flag', 'Watch · high minutes, under review']
       ]
     },
 
@@ -139,6 +186,27 @@
         ['Agent', 'None — guardian-managed'],
         ['Social media', 'Family-run · Tokyo Pitch Media advising'],
         ['Commercial deals', 'None on record']
+      ],
+      matches: [
+        ['14 Jun 26', 'U-16 Prefecture League', 'Yokohama Bay U-16', 'W 1–0', '90', '5 saves · CS', '8.0'],
+        ['31 May 26', 'Regional combine', 'Combine XI · Osaka', 'D 0–0', '90', '7 saves · CS', '8.7'],
+        ['17 May 26', 'U-16 Prefecture League', 'Shonan Coast U-16', 'W 2–1', '90', '4 saves', '7.5'],
+        ['03 May 26', 'U-16 Cup', 'Tokyo Machi U-16', 'L 1–2', '90', '6 saves', '7.8'],
+        ['19 Apr 26', 'U-16 Prefecture League', 'Chiba Port U-16', 'W 3–0', '90', '2 saves · CS', '7.4'],
+        ['05 Apr 26', 'U-16 Prefecture League', 'Saitama Hills U-16', 'W 1–0', '90', '8 saves · CS', '9.1']
+      ],
+      growth: { pct: [55, 62, 70, 78, 84], valueK: [60, 110, 180, 240, 320] },
+      education: [
+        ['School', 'Kawasaki Minami HS · enrolled'],
+        ['Attendance this term', '98%'],
+        ['GFE modules completed', 'Media basics'],
+        ['Next education review', 'Oct 2026']
+      ],
+      availability: [
+        ['Current status', 'Fully available'],
+        ['Days missed this season', '2 · illness (Jan)'],
+        ['Medical clearance', 'Valid · renewed Apr 2026'],
+        ['Workload flag', 'Normal · U-16 limits enforced']
       ]
     },
 
@@ -182,6 +250,27 @@
         ['Agent', 'None — guardian-managed'],
         ['Social media', 'Adria Athlete Studio · 96K followers'],
         ['Commercial deals', 'None on record']
+      ],
+      matches: [
+        ['07 Jun 26', 'U-17 League (W)', 'Split Adriatic U-17', 'W 2–0', '90', '78% duels · CS', '8.3'],
+        ['24 May 26', 'U-17 Cup final (W)', 'Osijek Istok U-17', 'W 1–0', '90', '1 G · CS', '8.9'],
+        ['10 May 26', 'U-17 League (W)', 'Rijeka Marina U-17', 'W 3–1', '90', '82% duels', '8.0'],
+        ['26 Apr 26', 'U-17 League (W)', 'Zadar Luka U-17', 'D 1–1', '90', '1 G (set piece)', '7.7'],
+        ['12 Apr 26', 'Regional combine', 'Combine XI · Zagreb', 'W 2–1', '70', '75% duels', '8.2'],
+        ['29 Mar 26', 'U-17 League (W)', 'Pula Arena U-17', 'W 2–0', '90', 'CS', '7.6']
+      ],
+      growth: { pct: [58, 66, 75, 83, 89], valueK: [80, 150, 260, 390, 520] },
+      education: [
+        ['School', 'XV. gimnazija Zagreb · enrolled'],
+        ['Attendance this term', '97%'],
+        ['GFE modules completed', 'Financial literacy · Captaincy & leadership'],
+        ['Next education review', 'Sep 2026']
+      ],
+      availability: [
+        ['Current status', 'Fully available'],
+        ['Days missed this season', '9 · hamstring (Nov)'],
+        ['Medical clearance', 'Valid · renewed Feb 2026'],
+        ['Workload flag', 'Normal · U-17 limits enforced']
       ]
     }
   };
@@ -198,7 +287,12 @@
     safeguarding: document.getElementById('ppSafe'),
     worth: document.getElementById('ppWorth'),
     ai: document.getElementById('ppAi'),
-    reps: document.getElementById('ppReps')
+    reps: document.getElementById('ppReps'),
+    matches: document.getElementById('ppMatches'),
+    edu: document.getElementById('ppEdu'),
+    avail: document.getElementById('ppAvail'),
+    chartPct: document.getElementById('chartPct'),
+    chartVal: document.getElementById('chartVal')
   };
 
   function el(tag, className, text) {
@@ -206,13 +300,6 @@
     if (className) node.className = className;
     if (text != null) node.textContent = text;
     return node;
-  }
-
-  function kvPair(parent, wrapTag, kText, vText) {
-    var wrap = el(wrapTag);
-    wrap.appendChild(el('div', 'k', kText));
-    wrap.appendChild(el('div', 'v', vText));
-    parent.appendChild(wrap);
   }
 
   function ordinal(n) {
@@ -226,12 +313,153 @@
     }
   }
 
+  function fmtValueK(k) {
+    return k >= 1000 ? '€' + (k / 1000).toFixed(1).replace('.0', '') + 'M' : '€' + k + 'K';
+  }
+
+  function renderRows(list, rows) {
+    list.textContent = '';
+    rows.forEach(function (row) {
+      var li = el('li');
+      li.appendChild(el('span', null, row[0]));
+      li.appendChild(el('span', 'ok', row[1]));
+      list.appendChild(li);
+    });
+  }
+
+  /* ---- Charts (single volt series on the dark panel surface) ---- */
+
+  var CHART = { w: 340, h: 158, padL: 34, padR: 18, padT: 16, padB: 26 };
+
+  function chartFrame(yMax, yTicks, fmt) {
+    var plotW = CHART.w - CHART.padL - CHART.padR;
+    var plotH = CHART.h - CHART.padT - CHART.padB;
+    var s = '';
+    yTicks.forEach(function (t) {
+      var y = (CHART.padT + plotH * (1 - t / yMax)).toFixed(1);
+      s += '<line x1="' + CHART.padL + '" y1="' + y + '" x2="' + (CHART.w - CHART.padR) + '" y2="' + y +
+        '" stroke="rgba(242,247,240,0.08)" stroke-width="1"/>';
+      s += '<text x="' + (CHART.padL - 6) + '" y="' + y + '" fill="#7c8c80" font-size="8.5" text-anchor="end" dominant-baseline="middle">' + fmt(t) + '</text>';
+    });
+    return s;
+  }
+
+  function xLabels(labels) {
+    var plotW = CHART.w - CHART.padL - CHART.padR;
+    var s = '';
+    labels.forEach(function (lab, i) {
+      var x = CHART.padL + (labels.length === 1 ? plotW / 2 : i * (plotW / (labels.length - 1)));
+      s += '<text x="' + x.toFixed(1) + '" y="' + (CHART.h - 8) + '" fill="#7c8c80" font-size="8.5" text-anchor="middle">' + lab + '</text>';
+    });
+    return s;
+  }
+
+  function attachTips(container) {
+    var tip = el('div', 'tip');
+    container.appendChild(tip);
+    Array.prototype.forEach.call(container.querySelectorAll('[data-tip]'), function (hit) {
+      hit.addEventListener('mouseenter', function () {
+        tip.textContent = hit.getAttribute('data-tip');
+        var c = container.getBoundingClientRect();
+        var r = hit.getBoundingClientRect();
+        tip.style.left = (r.left - c.left + r.width / 2) + 'px';
+        tip.style.top = (r.top - c.top) + 'px';
+        tip.classList.add('show');
+      });
+      hit.addEventListener('mouseleave', function () { tip.classList.remove('show'); });
+    });
+  }
+
+  function lineChart(container, labels, values, tipFmt) {
+    var yMax = 100;
+    var plotW = CHART.w - CHART.padL - CHART.padR;
+    var plotH = CHART.h - CHART.padT - CHART.padB;
+    var pts = values.map(function (v, i) {
+      return [
+        CHART.padL + i * (plotW / (values.length - 1)),
+        CHART.padT + plotH * (1 - v / yMax)
+      ];
+    });
+    var poly = pts.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ');
+    var base = (CHART.padT + plotH).toFixed(1);
+    var area = poly + ' ' + pts[pts.length - 1][0].toFixed(1) + ',' + base + ' ' + pts[0][0].toFixed(1) + ',' + base;
+
+    var s = '<svg viewBox="0 0 ' + CHART.w + ' ' + CHART.h + '" role="img" aria-label="Benchmark percentile by term: ' +
+      values.map(function (v, i) { return labels[i] + ' ' + ordinal(v); }).join(', ') + '">';
+    s += chartFrame(yMax, [0, 50, 100], function (t) { return t; });
+    s += '<polygon points="' + area + '" fill="rgba(198,249,78,0.08)"/>';
+    s += '<polyline points="' + poly + '" fill="none" stroke="#c6f94e" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+    pts.forEach(function (p, i) {
+      s += '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="3.5" fill="#c6f94e" stroke="#081f16" stroke-width="2"/>';
+      s += '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="12" fill="transparent" data-tip="' +
+        labels[i] + ' · ' + tipFmt(values[i]) + '"><title>' + labels[i] + ' · ' + tipFmt(values[i]) + '</title></circle>';
+    });
+    var last = pts[pts.length - 1];
+    s += '<text x="' + last[0].toFixed(1) + '" y="' + (last[1] - 9).toFixed(1) +
+      '" fill="#c6f94e" font-size="11" font-weight="700" text-anchor="end">' + tipFmt(values[values.length - 1]) + '</text>';
+    s += xLabels(labels) + '</svg>';
+
+    container.innerHTML = s;
+    attachTips(container);
+  }
+
+  function barChart(container, labels, values) {
+    var yMax = Math.ceil(Math.max.apply(null, values) * 1.15 / 100) * 100;
+    var plotW = CHART.w - CHART.padL - CHART.padR;
+    var plotH = CHART.h - CHART.padT - CHART.padB;
+    var slot = plotW / values.length;
+    var bw = slot * 0.52;
+    var base = CHART.padT + plotH;
+    var r = 4;
+
+    var s = '<svg viewBox="0 0 ' + CHART.w + ' ' + CHART.h + '" role="img" aria-label="Estimated market value by term: ' +
+      values.map(function (v, i) { return labels[i] + ' ' + fmtValueK(v); }).join(', ') + '">';
+    s += chartFrame(yMax, [0, yMax / 2, yMax], fmtValueK);
+    values.forEach(function (v, i) {
+      var x = CHART.padL + i * slot + (slot - bw) / 2;
+      var top = CHART.padT + plotH * (1 - v / yMax);
+      var h = base - top;
+      var rr = Math.min(r, h);
+      s += '<path d="M' + x.toFixed(1) + ',' + base.toFixed(1) +
+        ' V' + (top + rr).toFixed(1) +
+        ' Q' + x.toFixed(1) + ',' + top.toFixed(1) + ' ' + (x + rr).toFixed(1) + ',' + top.toFixed(1) +
+        ' H' + (x + bw - rr).toFixed(1) +
+        ' Q' + (x + bw).toFixed(1) + ',' + top.toFixed(1) + ' ' + (x + bw).toFixed(1) + ',' + (top + rr).toFixed(1) +
+        ' V' + base.toFixed(1) + ' Z" fill="#c6f94e" data-tip="' + labels[i] + ' · ' + fmtValueK(v) + '">' +
+        '<title>' + labels[i] + ' · ' + fmtValueK(v) + '</title></path>';
+      if (i === values.length - 1) {
+        s += '<text x="' + (x + bw / 2).toFixed(1) + '" y="' + (top - 5).toFixed(1) +
+          '" fill="#c6f94e" font-size="11" font-weight="700" text-anchor="middle">' + fmtValueK(v) + '</text>';
+      }
+    });
+    var midX = CHART.padL;
+    s += '<line x1="' + midX + '" y1="' + base.toFixed(1) + '" x2="' + (CHART.w - CHART.padR) + '" y2="' + base.toFixed(1) +
+      '" stroke="rgba(242,247,240,0.18)" stroke-width="1"/>';
+    // shift bar x labels to slot centres
+    var lab = '';
+    labels.forEach(function (t, i) {
+      var x = CHART.padL + i * slot + slot / 2;
+      lab += '<text x="' + x.toFixed(1) + '" y="' + (CHART.h - 8) + '" fill="#7c8c80" font-size="8.5" text-anchor="middle">' + t + '</text>';
+    });
+    s += lab + '</svg>';
+
+    container.innerHTML = s;
+    attachTips(container);
+  }
+
+  /* ---- Render a player into every view ---- */
+
   function render(player) {
     els.avatar.textContent = player.initials;
     els.name.textContent = player.name;
 
     els.meta.textContent = '';
-    player.meta.forEach(function (pair) { kvPair(els.meta, 'div', pair[0], pair[1]); });
+    player.meta.forEach(function (pair) {
+      var wrap = el('div');
+      wrap.appendChild(el('div', 'k', pair[0]));
+      wrap.appendChild(el('div', 'v', pair[1]));
+      els.meta.appendChild(wrap);
+    });
 
     els.tiles.textContent = '';
     player.tiles.forEach(function (pair) {
@@ -270,22 +498,32 @@
     renderRows(els.safeguarding, player.safeguarding);
     renderRows(els.ai, player.ai);
     renderRows(els.reps, player.reps);
+    renderRows(els.edu, player.education);
+    renderRows(els.avail, player.availability);
 
     els.worth.textContent = '';
     els.worth.appendChild(el('div', 'k', 'Estimated market value'));
     els.worth.appendChild(el('div', 'v', player.worth.amount));
     els.worth.appendChild(el('div', 'trend', '▲ ' + player.worth.trend));
     els.worth.appendChild(el('div', 'note', player.worth.note));
-  }
 
-  function renderRows(list, rows) {
-    list.textContent = '';
-    rows.forEach(function (row) {
-      var li = el('li');
-      li.appendChild(el('span', null, row[0]));
-      li.appendChild(el('span', 'ok', row[1]));
-      list.appendChild(li);
+    els.matches.textContent = '';
+    player.matches.forEach(function (m) {
+      var tr = el('tr');
+      tr.appendChild(el('td', null, m[0]));
+      tr.appendChild(el('td', null, m[1]));
+      tr.appendChild(el('td', null, m[2]));
+      tr.appendChild(el('td', null, m[3]));
+      tr.appendChild(el('td', 'num', m[4]));
+      tr.appendChild(el('td', null, m[5]));
+      var tdRate = el('td', 'num');
+      tdRate.appendChild(el('span', 'rate', m[6]));
+      tr.appendChild(tdRate);
+      els.matches.appendChild(tr);
     });
+
+    lineChart(els.chartPct, TERMS, player.growth.pct, ordinal);
+    barChart(els.chartVal, TERMS, player.growth.valueK);
   }
 
   function growBars() {
@@ -298,16 +536,21 @@
     });
   }
 
-  function select(tab, focus) {
-    var player = PLAYERS[tab.getAttribute('data-player')];
-    if (!player) return;
+  /* ---- Player switcher (top-level tabs) ---- */
 
+  function setPlayerTabState(tab) {
     tabs.forEach(function (t) {
       var active = t === tab;
       t.setAttribute('aria-selected', active ? 'true' : 'false');
       t.tabIndex = active ? 0 : -1;
     });
     dash.setAttribute('aria-labelledby', tab.id);
+  }
+
+  function select(tab, focus) {
+    var player = PLAYERS[tab.getAttribute('data-player')];
+    if (!player) return;
+    setPlayerTabState(tab);
     if (focus) tab.focus();
 
     if (reduceMotion) {
@@ -332,39 +575,53 @@
     });
   });
 
-  /* Deep link: passport.html#mateus opens that passport */
-  function selectFromHash(animate) {
-    var key = location.hash.slice(1);
-    if (!PLAYERS[key]) return;
-    var hashTab = document.getElementById('tab-' + key);
-    if (animate) {
-      select(hashTab, false);
-      return;
-    }
-    tabs.forEach(function (t) {
-      var active = t === hashTab;
+  /* ---- Sub-view tabs (overview / matches / growth / education) ---- */
+
+  var vtabs = Array.prototype.slice.call(document.querySelectorAll('.view-tabs [role="tab"]'));
+  function selectView(tab, focus) {
+    vtabs.forEach(function (t) {
+      var active = t === tab;
       t.setAttribute('aria-selected', active ? 'true' : 'false');
       t.tabIndex = active ? 0 : -1;
+      document.getElementById(t.getAttribute('data-view')).hidden = !active;
     });
-    dash.setAttribute('aria-labelledby', hashTab.id);
-    render(PLAYERS[key]);
+    if (focus) tab.focus();
+    if (tab.getAttribute('data-view') === 'viewOverview') growBars();
   }
-  selectFromHash(false);
-  window.addEventListener('hashchange', function () { selectFromHash(true); });
+  vtabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () { selectView(tab, false); });
+    tab.addEventListener('keydown', function (e) {
+      var dir = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (!dir) return;
+      e.preventDefault();
+      selectView(vtabs[(i + dir + vtabs.length) % vtabs.length], true);
+    });
+  });
 
-  /* Animate the default bars when the dashboard scrolls into view */
+  /* ---- Deep link + initial render ---- */
+
+  function playerKeyFromHash() {
+    var key = location.hash.slice(1);
+    return PLAYERS[key] ? key : null;
+  }
+
+  var initKey = playerKeyFromHash() || 'amara';
+  setPlayerTabState(document.getElementById('tab-' + initKey));
+  render(PLAYERS[initKey]);
+
+  window.addEventListener('hashchange', function () {
+    var key = playerKeyFromHash();
+    if (key) select(document.getElementById('tab-' + key), false);
+  });
+
+  /* ---- Animate benchmark bars when the dashboard scrolls into view ---- */
+
   if (!reduceMotion && 'IntersectionObserver' in window) {
     var seen = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) { growBars(); seen.unobserve(entry.target); }
       });
     }, { threshold: 0.25 });
-    els.bars.querySelectorAll('.bar-fill').forEach(function (fill) {
-      if (!fill.getAttribute('data-w')) {
-        fill.setAttribute('data-w', parseFloat(fill.style.width) || 0);
-        fill.style.width = '0%';
-      }
-    });
     seen.observe(els.bars);
   }
 })();
