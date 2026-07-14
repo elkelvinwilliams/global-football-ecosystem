@@ -23,7 +23,10 @@ open index.html        # macOS
 | `ecosystem.html` | Deep-dive on the six stakeholder pillars (players, clubs, academies, scouts, agents, fans) |
 | `talent.html` | The talent pathway — four stages, regional combines, development programs |
 | `insights.html` | Featured report + article grid + newsletter sign-up |
-| `passport.html` | Player passports demo — four switchable demo passports (identity, market value, stats, combine benchmarks, AI match analysis, timeline, footage, representation/off-pitch team, safeguarding), rendered from data |
+| `passport.html` | Player passports demo — four switchable demo passports rendered from data, each with four sub-views: Overview (identity, market value, benchmarks, AI analysis, representation, safeguarding), Match log, Growth charts, Education & availability |
+| `vision.html` | GFE Vision — the AI video-analysis product: annotated-clip mock, certification pipeline, position-aware metrics, integrity story |
+| `scouts.html` | Scout/club console demo — filterable player pool (position/region), shortlisting, links into demo passports, safeguarded-contact flow |
+| `fans.html` | Fans & partners — verified highlights, academy-funding memberships, transparent brand-deal marketplace with revenue split |
 | `contact.html` | Join-the-network form + regional hubs + safeguarding line |
 
 ## Brand
@@ -37,12 +40,14 @@ open index.html        # macOS
 ```
 global-football-ecosystem/
 ├── index.html  ecosystem.html  talent.html  passport.html
+├── vision.html  scouts.html  fans.html
 ├── insights.html  contact.html
 └── assets/
     ├── css/styles.css   # full design system (tokens, components, responsive)
     └── js/
         ├── main.js      # nav, scroll reveal, counters, parallax, forms
-        └── passport.js  # passport demo data + switchable dashboard rendering
+        ├── passport.js  # passport demo data, sub-views, SVG growth charts
+        └── scouts.js    # scout console demo data, filters, shortlisting
 ```
 
 ## Design system
@@ -57,6 +62,8 @@ global-football-ecosystem/
 - Pointer parallax on hero orbs (fine-pointer devices only)
 - Sticky header transition + scroll progress bar
 - Passport switcher (accessible tabs, arrow-key support, `#player` deep links) with cross-fade + growing benchmark bars
+- Passport sub-views (match log, SVG growth charts with hover tooltips, education record)
+- Scout console filters + shortlist; GFE Vision animated tracking mock (all reduced-motion aware)
 - **Respects `prefers-reduced-motion`** — all motion disables for users who opt out
 
 ## Notes for going live

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For Scouts &amp; Clubs — Global Football Ecosystem</title>
+  <meta name="description" content="The GFE scout console: search verified player passports worldwide, shortlist talent and make contact the safeguarded way. Illustrative demo." />
+  <meta name="theme-color" content="#06130d" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='24' r='21' fill='none' stroke='%23c6f94e' stroke-width='3'/%3E%3Cpath d='M24 15l8.5 6.2-3.2 10H18.7l-3.2-10z' fill='%23c6f94e'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header">
+    <div class="container nav">
+      <a href="index.html" class="brand" aria-label="Global Football Ecosystem — home">
+        <svg class="mark" width="38" height="38" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="2"/>
+          <path d="M24 15l8.5 6.2-3.2 10H18.7l-3.2-10z" fill="currentColor"/>
+          <path d="M24 4v11M32.5 21.2L42 17M29.3 31.2l6.2 9.3M18.7 31.2l-6.2 9.3M15.5 21.2L6 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="brand-name">GFE<small>Global&nbsp;Football&nbsp;Ecosystem</small></span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="ecosystem.html">Ecosystem</a>
+        <a href="talent.html">Pathway</a>
+        <a href="passport.html">Passport</a>
+        <a href="vision.html">Vision</a>
+        <a href="scouts.html" aria-current="page">Scouts</a>
+        <a href="fans.html">Fans</a>
+        <a href="insights.html">Insights</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+
+      <div class="nav-cta">
+        <a href="contact.html" class="btn btn-volt">Join the network
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="ecosystem.html">Ecosystem</a>
+    <a href="talent.html">Pathway</a>
+    <a href="passport.html">Passport</a>
+    <a href="vision.html">Vision</a>
+    <a href="scouts.html" aria-current="page">Scouts</a>
+    <a href="fans.html">Fans</a>
+    <a href="insights.html">Insights</a>
+    <a href="contact.html">Contact</a>
+    <a href="contact.html" class="btn btn-volt">Join the network</a>
+  </div>
+
+  <main>
+    <!-- ============ PAGE HERO ============ -->
+    <section class="page-hero">
+      <div class="container">
+        <span class="eyebrow reveal">For scouts &amp; clubs</span>
+        <h1 class="reveal reveal-d1">See every player. <span class="volt">Miss no one.</span></h1>
+        <p class="lead reveal reveal-d2">Search verified passports across every region — real ages, certified footage, comparable benchmarks. Below is an illustrative console with demo players.</p>
+      </div>
+    </section>
+
+    <!-- ============ SCOUT CONSOLE DEMO ============ -->
+    <section class="bg-alt">
+      <div class="container">
+        <div class="filters reveal" aria-label="Filter players">
+          <div class="filter-group" role="group" aria-label="Filter by position">
+            <span class="filter-label">Position</span>
+            <button class="chip" data-filter="pos" data-value="all" aria-pressed="true">All</button>
+            <button class="chip" data-filter="pos" data-value="Forward" aria-pressed="false">Forwards</button>
+            <button class="chip" data-filter="pos" data-value="Midfielder" aria-pressed="false">Midfielders</button>
+            <button class="chip" data-filter="pos" data-value="Defender" aria-pressed="false">Defenders</button>
+            <button class="chip" data-filter="pos" data-value="Goalkeeper" aria-pressed="false">Goalkeepers</button>
+          </div>
+          <div class="filter-group" role="group" aria-label="Filter by region">
+            <span class="filter-label">Region</span>
+            <button class="chip" data-filter="region" data-value="all" aria-pressed="true">All</button>
+            <button class="chip" data-filter="region" data-value="Africa" aria-pressed="false">Africa</button>
+            <button class="chip" data-filter="region" data-value="South America" aria-pressed="false">South America</button>
+            <button class="chip" data-filter="region" data-value="Asia" aria-pressed="false">Asia</button>
+            <button class="chip" data-filter="region" data-value="Europe" aria-pressed="false">Europe</button>
+          </div>
+        </div>
+
+        <div class="result-bar reveal">
+          <span id="resultCount" aria-live="polite">8 players</span>
+          <span id="shortlistCount" aria-live="polite">Shortlist · 0</span>
+        </div>
+
+        <div class="scout-grid" id="scoutGrid" aria-live="polite"></div>
+        <p class="empty-state" id="emptyState" hidden>No demo players match those filters — try widening the search.</p>
+
+        <p class="dash-note" style="margin-top:2rem;">Illustrative console — demo data only; every player shown is fictional. In the live network, access requires a verified scout licence.</p>
+      </div>
+    </section>
+
+    <!-- ============ HOW CONTACT WORKS ============ -->
+    <section>
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Contact, the safeguarded way</span>
+          <h2 class="section-title">Interest is welcome. Ambush isn't.</h2>
+        </div>
+
+        <div class="grid grid-3">
+          <article class="card reveal">
+            <span class="tag">Step 1</span>
+            <h3>Request through the passport</h3>
+            <p>Every approach starts inside the platform — no direct messages to minors, ever. Your club identity and licence are attached automatically.</p>
+          </article>
+          <article class="card reveal reveal-d1">
+            <span class="tag">Step 2</span>
+            <h3>Guardians &amp; academy approve</h3>
+            <p>The player's guardians and academy see the request, your history, and decide together. Every approach is logged on the safeguarding record.</p>
+          </article>
+          <article class="card reveal reveal-d2">
+            <span class="tag">Step 3</span>
+            <h3>Introduction, on the record</h3>
+            <p>Approved contact happens through the platform with guardians present. Development years stay attributed, so training compensation follows the player.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="bg-alt">
+      <div class="container">
+        <div class="cta-panel reveal">
+          <span class="eyebrow" style="justify-content:center;">For clubs &amp; scouts</span>
+          <h2>Scout with the <span class="volt">whole picture.</span></h2>
+          <p class="lead">Verified ages, certified footage and comparable benchmarks for players your travel budget would never reach. Apply for a scout licence.</p>
+          <div class="cta-actions">
+            <a href="contact.html" class="btn btn-volt">Apply for access
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a href="passport.html" class="btn btn-outline">See a player passport</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="brand" aria-label="Global Football Ecosystem — home">
+            <svg class="mark" width="38" height="38" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+              <circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="2"/>
+              <path d="M24 15l8.5 6.2-3.2 10H18.7l-3.2-10z" fill="currentColor"/>
+              <path d="M24 4v11M32.5 21.2L42 17M29.3 31.2l6.2 9.3M18.7 31.2l-6.2 9.3M15.5 21.2L6 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span class="brand-name">GFE<small>Global&nbsp;Football&nbsp;Ecosystem</small></span>
+          </a>
+          <p>Connecting every side of the world's game — so talent is found, developed and rewarded wherever it plays.</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Ecosystem</h4>
+          <ul>
+            <li><a href="ecosystem.html#players">Players</a></li>
+            <li><a href="ecosystem.html#clubs">Clubs</a></li>
+            <li><a href="ecosystem.html#academies">Academies</a></li>
+            <li><a href="ecosystem.html#scouts">Scouts</a></li>
+            <li><a href="ecosystem.html#agents">Agents</a></li>
+            <li><a href="ecosystem.html#fans">Fans</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Network</h4>
+          <ul>
+            <li><a href="talent.html">Talent pathway</a></li>
+            <li><a href="passport.html">Player passport</a></li>
+            <li><a href="vision.html">GFE Vision</a></li>
+            <li><a href="scouts.html">For scouts &amp; clubs</a></li>
+            <li><a href="fans.html">Fans &amp; partners</a></li>
+            <li><a href="insights.html">Insights</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="contact.html">Partner with us</a></li>
+            <li><a href="contact.html">Careers</a></li>
+            <li><a href="contact.html">Press</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-legal">
+        <span>© <span id="year">2026</span> Global Football Ecosystem. A demonstration project — not affiliated with FIFA or any confederation.</span>
+        <span>One game. One world. One ecosystem.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/scouts.js" defer></script>
+</body>
+</html>
