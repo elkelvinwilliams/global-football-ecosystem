@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Player Passport — Global Football Ecosystem</title>
   <meta name="description" content="The GFE player passport: one verified profile — footage, stats, development record and safeguarding log — owned by the player for life. Illustrative demo." />
-  <meta name="theme-color" content="#06130d" />
+  <meta name="theme-color" content="#0a090c" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/styles.css" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='24' r='21' fill='none' stroke='%23c6f94e' stroke-width='3'/%3E%3Cpath d='M24 15l8.5 6.2-3.2 10H18.7l-3.2-10z' fill='%23c6f94e'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="assets/css/passport-lux.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='24' r='21' fill='none' stroke='%23d6b36a' stroke-width='3'/%3E%3Cpath d='M24 15l8.5 6.2-3.2 10H18.7l-3.2-10z' fill='%23d6b36a'/%3E%3C/svg%3E" />
 </head>
 <body>
   <div class="scroll-progress" aria-hidden="true"></div>
@@ -100,6 +101,15 @@
           <div class="dash-grid">
             <!-- Identity card -->
             <div class="id-card">
+              <div class="lux-seal" aria-hidden="true" title="GFE holographic seal">
+                <span class="lux-seal-inner">
+                  <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                    <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="1.6"/>
+                    <path d="M24 15l8.5 6.2-3.2 10H18.7l-3.2-10z" fill="currentColor"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="lux-stamp" aria-hidden="true">GFE · Verified<br />Identity &amp; Age</div>
               <div class="avatar" id="ppAvatar" aria-hidden="true">AD</div>
               <h3 id="ppName">Amara Diallo</h3>
               <span class="verified">
@@ -123,6 +133,7 @@
               <a class="card-link id-club-link" id="ppClubLink" href="clubs.html#etoile">Club passport · Étoile de Dakar
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </a>
+              <div class="lux-mrz" id="ppMrz" aria-hidden="true">P&lt;GFEDIALLO&lt;&lt;AMARA&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br />GFESN40217&lt;9SEN1002261F&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;04</div>
             </div>
 
             <!-- Right column -->
@@ -365,5 +376,32 @@
 
   <script src="assets/js/main.js" defer></script>
   <script src="assets/js/passport.js" defer></script>
+  <script>
+    // Machine-readable zone: regenerates whenever the demo passport
+    // switches players. Purely visual — same data shown above it.
+    (function () {
+      function pad(s, n) { return (s + "<".repeat(n)).slice(0, n); }
+      function renderMrz() {
+        var nameEl = document.getElementById("ppName");
+        var mrzEl = document.getElementById("ppMrz");
+        if (!nameEl || !mrzEl) return;
+        var parts = nameEl.textContent.trim().toUpperCase()
+          .normalize("NFD").replace(/[̀-ͯ]/g, "")
+          .replace(/[^A-Z ]/g, "").split(/\s+/);
+        var surname = parts[parts.length - 1] || "";
+        var given = parts.slice(0, -1).join("<") || "";
+        var idMatch = document.getElementById("ppMeta")
+          .textContent.match(/GFE-([A-Z]{2})-(\d+)/) || [null, "XX", "00000"];
+        var line1 = pad("P<GFE" + surname + "<<" + given, 44);
+        var line2 = pad("GFE" + idMatch[1] + idMatch[2] + "<9" + idMatch[1] + "<<<<<<<", 42) + "04";
+        mrzEl.innerHTML = line1.replace(/</g, "&lt;") + "<br />" + line2.replace(/</g, "&lt;");
+      }
+      var target = document.getElementById("ppName");
+      if (target) {
+        new MutationObserver(renderMrz).observe(target, { childList: true, characterData: true, subtree: true });
+        renderMrz();
+      }
+    })();
+  </script>
 </body>
 </html>
